@@ -73,7 +73,7 @@ export default function PreDepositSuccess({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-      <div className="bg-gradient-to-br from-crypto-dark-800 to-crypto-dark-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-crypto-dark-700 my-4">
+      <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-700 my-4">
         <div className="p-6 md:p-8">
           {/* Success Header */}
           <div className="text-center mb-6">
@@ -167,7 +167,7 @@ export default function PreDepositSuccess({
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-400">Type:</span>
-                      <span className={`font-medium ${biddingEnabled ? 'text-purple-400' : 'text-blue-400'}`}>
+                      <span className={`font-medium ${biddingEnabled ? 'text-blue-400' : 'text-green-400'}`}>
                         {biddingEnabled ? 'Bidding' : 'Random Selection'}
                       </span>
                     </div>
@@ -237,7 +237,7 @@ export default function PreDepositSuccess({
                   
                   <div className="flex justify-between">
                     <span className="text-gray-400">Selection Method:</span>
-                    <span className={`font-medium ${biddingEnabled ? 'text-purple-400' : 'text-blue-400'}`}>
+                    <span className={`font-medium ${biddingEnabled ? 'text-blue-400' : 'text-green-400'}`}>
                       {biddingEnabled ? 'Highest Bid Wins' : 'Random Selection'}
                     </span>
                   </div>
@@ -284,16 +284,16 @@ export default function PreDepositSuccess({
           <div className="flex space-x-4">
             <button
               onClick={onClose}
-              className="flex-1 px-6 py-3 border border-crypto-dark-600 rounded-xl text-gray-300 hover:text-white hover:bg-crypto-dark-700 transition-all duration-300"
+              className="flex-1 px-6 py-3 border border-gray-600 rounded-xl text-gray-300 hover:text-white hover:bg-gray-700 transition-all duration-300"
             >
               Close
             </button>
             
-            <button
-              onClick={handleViewGroup}
-              disabled={isLoading}
-              className="flex-1 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 shadow-lg hover:shadow-purple-500/25"
-            >
+                          <button
+                onClick={handleViewGroup}
+                disabled={isLoading}
+                className="flex-1 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg hover:shadow-blue-500/25"
+              >
               {isLoading ? (
                 <div className="flex items-center justify-center">
                   <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">

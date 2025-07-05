@@ -75,7 +75,7 @@ export default function CollateralDeposit({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-            <div className="bg-gradient-to-br from-crypto-dark-800 to-crypto-dark-900 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-crypto-dark-700 my-4">
+            <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-700 my-4">
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-semibold text-white">Deposit Collateral</h2>
@@ -114,7 +114,7 @@ export default function CollateralDeposit({
               id="depositAmount"
               value={depositAmount}
               onChange={handleAmountChange}
-              className="w-full px-3 py-2 bg-crypto-dark-700/50 border border-crypto-dark-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+              className="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               placeholder="0.00"
               min={totalLumpSum}
               step="0.01"
@@ -127,6 +127,24 @@ export default function CollateralDeposit({
           <p className="mt-1 text-sm text-gray-400">
             Available: {userBalance.toFixed(2)} USDC
           </p>
+        </div>
+
+        {/* Collateral Slashing Warning */}
+        <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 mb-6">
+          <div className="flex items-start">
+            <div className="flex-shrink-0">
+              <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-red-400">Important Warning</h3>
+              <div className="mt-2 text-sm text-red-300">
+                <p><strong>Collateral Slashing Risk:</strong> If you stop contributing to the group or fail to meet your obligations, your deposited collateral may be slashed.</p>
+                <p className="mt-1">Ensure you can commit to the full contribution schedule before proceeding.</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Euler Integration Info */}
@@ -156,17 +174,13 @@ export default function CollateralDeposit({
               <span>{depositAmount.toFixed(2)} USDC</span>
             </div>
             <div className="flex justify-between">
-              <span>Network Fee:</span>
-              <span>~$2.50</span>
-            </div>
-            <div className="flex justify-between">
               <span>Protocol Fee:</span>
               <span>0.5%</span>
             </div>
             <hr className="my-2 border-crypto-dark-600" />
             <div className="flex justify-between font-medium">
               <span>Total:</span>
-              <span>{(depositAmount * 1.005 + 2.50).toFixed(2)} USDC</span>
+              <span>{(depositAmount * 1.005).toFixed(2)} USDC</span>
             </div>
           </div>
         </div>
@@ -176,7 +190,7 @@ export default function CollateralDeposit({
           <button
             onClick={onCancel}
             disabled={isDepositing}
-            className="flex-1 px-4 py-2 border border-crypto-dark-600 rounded-xl text-gray-300 hover:text-white hover:bg-crypto-dark-700 transition-all duration-300 disabled:opacity-50"
+            className="flex-1 px-4 py-2 border border-gray-600 rounded-xl text-gray-300 hover:text-white hover:bg-gray-700 transition-all duration-300 disabled:opacity-50"
           >
             Cancel
           </button>
@@ -185,8 +199,8 @@ export default function CollateralDeposit({
             disabled={isDepositing || depositAmount < totalLumpSum || depositAmount > userBalance}
             className={`flex-1 px-4 py-2 rounded-xl font-medium text-white transition-all duration-300 ${
               isDepositing || depositAmount < totalLumpSum || depositAmount > userBalance
-                ? 'bg-crypto-dark-600 cursor-not-allowed'
-                : 'bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 shadow-lg hover:shadow-purple-500/25'
+                ? 'bg-gray-600 cursor-not-allowed'
+                : 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg hover:shadow-blue-500/25'
             }`}
           >
             {isDepositing ? (

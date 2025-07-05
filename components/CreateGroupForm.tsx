@@ -206,7 +206,7 @@ export default function CreateGroupForm({ onSubmit, isLoading = false }: CreateG
         <div className="bg-gradient-to-br from-crypto-dark-800/80 to-crypto-dark-900/80 backdrop-blur-sm border border-crypto-dark-700 rounded-2xl p-6 shadow-xl">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center">
-              <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mr-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mr-3">
                 <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
@@ -219,8 +219,8 @@ export default function CreateGroupForm({ onSubmit, isLoading = false }: CreateG
             <button
               type="button"
               onClick={() => handleInputChange('biddingEnabled', !formData.biddingEnabled)}
-              className={`relative inline-flex h-12 w-20 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-crypto-dark-800 ${
-                formData.biddingEnabled ? 'bg-gradient-to-r from-purple-500 to-purple-600' : 'bg-crypto-dark-600'
+              className={`relative inline-flex h-12 w-20 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 ${
+                formData.biddingEnabled ? 'bg-gradient-to-r from-blue-500 to-blue-600' : 'bg-gray-600'
               }`}
             >
               <span
@@ -233,7 +233,7 @@ export default function CreateGroupForm({ onSubmit, isLoading = false }: CreateG
           
           <div className="bg-crypto-dark-700/30 rounded-xl p-4 border border-crypto-dark-600">
             <div className="flex items-start space-x-3">
-              <div className={`w-2 h-2 rounded-full mt-2 ${formData.biddingEnabled ? 'bg-purple-400' : 'bg-gray-500'}`}></div>
+              <div className={`w-2 h-2 rounded-full mt-2 ${formData.biddingEnabled ? 'bg-blue-400' : 'bg-gray-500'}`}></div>
               <div>
                 <p className="text-white font-medium">
                   {formData.biddingEnabled ? 'Bidding Enabled' : 'Random Selection'}
@@ -263,7 +263,7 @@ export default function CreateGroupForm({ onSubmit, isLoading = false }: CreateG
             value={formData.description}
             onChange={(e) => handleInputChange('description', e.target.value)}
             rows={3}
-            className="w-full px-4 py-3 bg-crypto-dark-700/50 border border-crypto-dark-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all resize-none"
+            className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
             placeholder="Describe your group's purpose, rules, or any special requirements..."
           />
         </div>
@@ -290,12 +290,12 @@ export default function CreateGroupForm({ onSubmit, isLoading = false }: CreateG
               <p className="text-2xl font-bold text-emerald-300">${estimatedYield.toFixed(2)}</p>
               <p className="text-xs text-emerald-400/70">7% APY on Euler</p>
             </div>
-            <div className="bg-gradient-to-br from-purple-500/10 to-purple-600/10 border border-purple-500/20 rounded-xl p-4">
-              <p className="text-sm text-purple-400 font-medium">Cycle Duration</p>
-              <p className="text-2xl font-bold text-purple-300">
+            <div className="bg-gradient-to-br from-gray-500/10 to-gray-600/10 border border-gray-500/20 rounded-xl p-4">
+              <p className="text-sm text-gray-400 font-medium">Cycle Duration</p>
+              <p className="text-2xl font-bold text-gray-300">
                 {formData.timeframe === '72h' ? '72h' : formData.timeframe === 'weekly' ? '7d' : '30d'}
               </p>
-              <p className="text-xs text-purple-400/70">per contribution</p>
+              <p className="text-xs text-gray-400/70">per contribution</p>
             </div>
           </div>
           
@@ -310,9 +310,15 @@ export default function CreateGroupForm({ onSubmit, isLoading = false }: CreateG
                 <span>Cycle: {formData.timeframe === '72h' ? 'Every 72 hours' : formData.timeframe === 'weekly' ? 'Every week' : 'Every month'}</span>
               </div>
               <div className="flex items-center">
-                <div className="w-2 h-2 bg-purple-400 rounded-full mr-3"></div>
+                <div className="w-2 h-2 bg-blue-400 rounded-full mr-3"></div>
                 <span>Selection: {formData.biddingEnabled ? 'Bidding system' : 'Random (Chainlink VRF)'}</span>
               </div>
+              {formData.biddingEnabled && (
+                <div className="flex items-center">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full mr-3"></div>
+                  <span>Creator kickback: 5% of protocol fees from total bids</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -322,10 +328,10 @@ export default function CreateGroupForm({ onSubmit, isLoading = false }: CreateG
           <button
             type="submit"
             disabled={isLoading || !formData.groupName}
-            className={`px-8 py-4 rounded-2xl font-semibold text-lg text-white transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-purple-500/50 ${
+            className={`px-8 py-4 rounded-2xl font-semibold text-lg text-white transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-500/50 ${
               isLoading || !formData.groupName
-                ? 'bg-crypto-dark-600 cursor-not-allowed'
-                : 'bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 shadow-2xl hover:shadow-purple-500/25'
+                ? 'bg-gray-600 cursor-not-allowed'
+                : 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-2xl hover:shadow-blue-500/25'
             }`}
           >
             {isLoading ? (
