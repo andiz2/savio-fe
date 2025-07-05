@@ -7,6 +7,8 @@ import JoinGroupBrowser from "../components/JoinGroupBrowser";
 import CollateralDeposit from "../components/CollateralDeposit";
 import DepositSuccess from "../components/DepositSuccess";
 import PreDepositSuccess from "../components/PreDepositSuccess";
+import { CREATE_GROUP } from "../lib/utils";
+import { useAuth } from "../context/DataContext";
 
 // Mock groups data for demonstration
 const mockGroups = [
@@ -153,6 +155,7 @@ const mockGroups = [
 ];
 
 export default function DashboardPage() {
+    const { walletData } = useAuth();
   const router = useRouter();
   const { ready, authenticated, logout } = usePrivy();
   const [activeTab, setActiveTab] = useState('overview');
@@ -190,19 +193,13 @@ export default function DashboardPage() {
   const [createdGroupLink, setCreatedGroupLink] = useState('');
 
   const handleCreateGroup = async (formData: GroupFormData) => {
+    console.log("formData", formData)
     setIsCreatingGroup(true);
     try {
       // TODO: Implement smart contract interaction
       console.log('Creating group with data:', formData);
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Generate unique group link (in real app, this would come from the smart contract)
-      const groupId = Math.random().toString(36).substr(2, 9);
-      const groupLink = `https://savio.xyz/join/${groupId}`;
-      setCreatedGroupLink(groupLink);
-      setShowInviteModal(true);
-      
+      CREATE_GROUP({walletData, period: 4, totalMembers: formData.maxMembers, pledgeAmount: formData.contributionAmount * formData.maxMembers})
     } catch (error) {
       console.error('Failed to create group:', error);
       alert('Failed to create group. Please try again.');
@@ -273,13 +270,6 @@ export default function DashboardPage() {
         return (
           <div className="space-y-8">
             {/* Hero Section */}
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-3xl mb-6 shadow-2xl">
-                <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                </svg>
-              </div>
-            </div>
 
             {/* Stats Cards - Keeping the totals you like */}
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
