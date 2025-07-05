@@ -1,18 +1,18 @@
-import { sepolia } from "viem/chains";
+import { baseSepolia } from "viem/chains";
 
 // Smart Wallet Factory Configuration
 export const SMART_WALLET_CONFIG = {
   // Your deployed factory contract address (REQUIRED)
-  factoryAddress: process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`,
+  factoryAddress: "0x5b86fAcC8c1350D970f25DE9c481CDDA91d1C818" as `0x${string}`,
   
   // Chain configuration
-  chain: sepolia,
+  chain: baseSepolia,
   
   // Entry Point Address (REQUIRED for ERC-4337)
   entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789" as `0x${string}`,
   
-  // Bundler configuration
-  bundlerUrl: "https://bundler.biconomy.io/api/v3/11155111/bundler_3ZWviMnNXD7h9URmfW85jDQm",
+  // Bundler configuration for Base Sepolia
+  bundlerUrl: "https://bundler.biconomy.io/api/v3/84532/bundler_3ZWviMnNXD7h9URmfW85jDQm",
   
   // Gas configuration
   gasConfig: {
@@ -132,30 +132,10 @@ export const SMART_WALLET_ABI = [
 
 // Helper function to create smart wallet configuration for Privy
 export const createSmartWalletConfig = () => {
-  // Check if factory address is provided
-  if (!SMART_WALLET_CONFIG.factoryAddress) {
-    console.warn("⚠️ NEXT_PUBLIC_FACTORY_ADDRESS not set. Using default Biconomy smart wallets.");
-    console.log("✅ Using default Biconomy configuration - no custom factory needed");
-    return {
-      embeddedWallets: {
-        createOnLogin: "all-users" as const,
-        // Use Biconomy's default configuration - no custom settings
-      },
-    };
-  }
-
-  console.log("✅ Using custom factory address:", SMART_WALLET_CONFIG.factoryAddress);
-  console.log("✅ Using entry point address:", SMART_WALLET_CONFIG.entryPointAddress);
-  console.log("✅ Using bundler URL:", SMART_WALLET_CONFIG.bundlerUrl);
-  
+  // Use Privy's default smart wallets (Biconomy)
   return {
     embeddedWallets: {
       createOnLogin: "all-users" as const,
-      factoryAddress: SMART_WALLET_CONFIG.factoryAddress,
-      entryPointAddress: SMART_WALLET_CONFIG.entryPointAddress,
-      bundlerUrl: SMART_WALLET_CONFIG.bundlerUrl,
-      // Add additional configuration for custom factory
-      gasConfig: SMART_WALLET_CONFIG.gasConfig,
     },
   };
 }; 

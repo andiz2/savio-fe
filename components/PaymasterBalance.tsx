@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSmartWallets } from "@privy-io/react-auth/smart-wallets";
 import { CirclePaymaster } from "./lib/paymaster";
 
@@ -10,7 +10,7 @@ export default function PaymasterBalance() {
 
   const paymaster = new CirclePaymaster();
 
-  const checkBalance = async () => {
+  const checkBalance = useCallback(async () => {
     if (!smartWalletClient?.account?.address) return;
 
     setLoading(true);
@@ -27,13 +27,13 @@ export default function PaymasterBalance() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [smartWalletClient?.account?.address]);
 
   useEffect(() => {
     if (smartWalletClient?.account?.address) {
       checkBalance();
     }
-  }, [smartWalletClient?.account?.address]);
+  }, [smartWalletClient?.account?.address, checkBalance]);
 
   const handleRefreshBalance = () => {
     checkBalance();
