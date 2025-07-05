@@ -4,6 +4,8 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import CreateGroupForm, { GroupFormData } from "../components/CreateGroupForm";
+import JoinGroupBrowser from "../components/JoinGroupBrowser";
+import CollateralDeposit from "../components/CollateralDeposit";
 import { encodeFunctionData, erc721Abi } from "viem";
 import { mintAbi } from "../components/lib/abis/mint";
 import PaymasterBalance from "../components/PaymasterBalance";
@@ -18,6 +20,14 @@ export default function DashboardPage() {
   const { client: smartWalletClient } = useSmartWallets();
   const [activeTab, setActiveTab] = useState('overview');
   const [isCreatingGroup, setIsCreatingGroup] = useState(false);
+  const [isJoiningGroup, setIsJoiningGroup] = useState(false);
+  const [showCollateralDeposit, setShowCollateralDeposit] = useState(false);
+  const [selectedGroup, setSelectedGroup] = useState<{
+    id: string;
+    name: string;
+    contributionAmount: number;
+    maxMembers: number;
+  } | null>(null);
 
   useEffect(() => {
     if (ready && !authenticated) {
@@ -47,6 +57,31 @@ export default function DashboardPage() {
     } finally {
       setIsCreatingGroup(false);
     }
+  };
+
+  const handleJoinGroup = async (groupId: string) => {
+    // Find the group details from mock data (in real app, this would come from API)
+    const mockGroup = {
+      id: groupId,
+      name: 'Weekly Savers Club', // This would come from the actual group data
+      contributionAmount: 100,
+      maxMembers: 5
+    };
+    
+    setSelectedGroup(mockGroup);
+    setShowCollateralDeposit(true);
+  };
+
+  const handleDepositComplete = (txHash: string) => {
+    setShowCollateralDeposit(false);
+    setSelectedGroup(null);
+    alert(`Deposit successful! Transaction: ${txHash.slice(0, 10)}...`);
+    // TODO: Update user's groups list
+  };
+
+  const handleDepositCancel = () => {
+    setShowCollateralDeposit(false);
+    setSelectedGroup(null);
   };
 
   const renderTabContent = () => {
@@ -82,13 +117,7 @@ export default function DashboardPage() {
         );
       case 'join-group':
         return (
-          <div className="bg-white rounded-lg p-6 shadow-sm">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Join Existing Group</h2>
-            <p className="text-gray-600 mb-6">Browse and join available savings groups.</p>
-            <div className="text-center py-8">
-              <p className="text-gray-500">Group browser coming in next step...</p>
-            </div>
-          </div>
+          <JoinGroupBrowser onJoinGroup={handleJoinGroup} isLoading={isJoiningGroup} />
         );
       case 'my-groups':
         return (
@@ -171,6 +200,18 @@ export default function DashboardPage() {
               {/* Tab Content */}
               {renderTabContent()}
             </div>
+
+            {/* Collateral Deposit Modal */}
+            {showCollateralDeposit && selectedGroup && (
+              <CollateralDeposit
+                groupId={selectedGroup.id}
+                groupName={selectedGroup.name}
+                contributionAmount={selectedGroup.contributionAmount}
+                maxMembers={selectedGroup.maxMembers}
+                onDepositComplete={handleDepositComplete}
+                onCancel={handleDepositCancel}
+              />
+            )}
           </>
         ) : (
           <div className="flex items-center justify-center min-h-screen">
