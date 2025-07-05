@@ -79,24 +79,34 @@ export default function CreateGroupForm({ onSubmit, isLoading = false }: CreateG
                 />
               </div>
               
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Contribution Amount</label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    value={formData.contributionAmount}
-                    onChange={(e) => handleInputChange('contributionAmount', parseFloat(e.target.value) || 0)}
-                    className="w-full px-4 py-3 bg-crypto-dark-700/50 border border-crypto-dark-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                    placeholder="100"
-                    min="1"
-                    step="0.01"
-                    required
-                  />
-                  <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
-                    <span className="text-gray-400 font-medium">USDC</span>
+                              <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Contribution Amount</label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      value={formData.contributionAmount}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === '' || value === '0') {
+                          handleInputChange('contributionAmount', 0);
+                        } else {
+                          const numValue = parseFloat(value);
+                          if (!isNaN(numValue) && numValue >= 0) {
+                            handleInputChange('contributionAmount', numValue);
+                          }
+                        }
+                      }}
+                      className="w-full px-4 py-3 bg-crypto-dark-700/50 border border-crypto-dark-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                      placeholder="100"
+                      min="0"
+                      step="0.01"
+                      required
+                    />
+                    <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
+                      <span className="text-gray-400 font-medium">USDC</span>
+                    </div>
                   </div>
                 </div>
-              </div>
             </div>
           </div>
 
@@ -112,19 +122,29 @@ export default function CreateGroupForm({ onSubmit, isLoading = false }: CreateG
             </div>
             
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Max Members</label>
-                <input
-                  type="number"
-                  value={formData.maxMembers}
-                  onChange={(e) => handleInputChange('maxMembers', parseInt(e.target.value) || 1)}
-                  className="w-full px-4 py-3 bg-crypto-dark-700/50 border border-crypto-dark-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                  placeholder="5"
-                  min="2"
-                  max="20"
-                  required
-                />
-              </div>
+                              <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Max Members</label>
+                  <input
+                    type="number"
+                    value={formData.maxMembers}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value === '' || value === '0') {
+                        handleInputChange('maxMembers', 2);
+                      } else {
+                        const numValue = parseInt(value);
+                        if (!isNaN(numValue) && numValue >= 2 && numValue <= 10) {
+                          handleInputChange('maxMembers', numValue);
+                        }
+                      }
+                    }}
+                    className="w-full px-4 py-3 bg-crypto-dark-700/50 border border-crypto-dark-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                    placeholder="5"
+                    min="2"
+                    max="10"
+                    required
+                  />
+                </div>
               
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">Contribution Cycle</label>

@@ -36,20 +36,8 @@ export default function DashboardPage() {
   ];
 
   const [showWhyModal, setShowWhyModal] = useState(false);
-  const [showFilterModal, setShowFilterModal] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [createdGroupLink, setCreatedGroupLink] = useState('');
-  const [filterCriteria, setFilterCriteria] = useState({
-    minTVL: 0,
-    maxTVL: 10000,
-    minContribution: 0,
-    maxContribution: 1000,
-    minBid: 0,
-    maxBid: 500,
-    minMembers: 0,
-    maxMembers: 20,
-    cycleType: 'all'
-  });
 
   const handleCreateGroup = async (formData: GroupFormData) => {
     setIsCreatingGroup(true);
@@ -166,60 +154,35 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* WHY & SAVE Sections */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="bg-gradient-to-br from-crypto-dark-800/80 to-crypto-dark-900/80 backdrop-blur-sm border border-crypto-dark-700 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300">
-                <div className="flex items-center mb-6">
-                  <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mr-4">
-                    <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-white">Why Savio?</h3>
-                    <p className="text-gray-400">Learn about our mission</p>
-                  </div>
+            {/* SAVE Section */}
+            <div className="bg-gradient-to-br from-crypto-dark-800/80 to-crypto-dark-900/80 backdrop-blur-sm border border-crypto-dark-700 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300">
+              <div className="flex items-center mb-6">
+                <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center mr-4">
+                  <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                  </svg>
                 </div>
-                <p className="text-gray-300 mb-6">
-                  Discover how Savio revolutionizes traditional rotating savings with DeFi yields, smart contracts, and community-driven wealth building.
-                </p>
-                <button
-                  onClick={() => setShowWhyModal(true)}
-                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 py-3 px-6 rounded-xl font-semibold text-white transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/25"
-                >
-                  Learn More
-                </button>
+                <div>
+                  <h3 className="text-xl font-semibold text-white">Start Saving</h3>
+                  <p className="text-gray-400">Create or join groups</p>
+                </div>
               </div>
-
-              <div className="bg-gradient-to-br from-crypto-dark-800/80 to-crypto-dark-900/80 backdrop-blur-sm border border-crypto-dark-700 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300">
-                <div className="flex items-center mb-6">
-                  <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center mr-4">
-                    <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-white">Start Saving</h3>
-                    <p className="text-gray-400">Create or join groups</p>
-                  </div>
-                </div>
-                <p className="text-gray-300 mb-6">
-                  Ready to start your savings journey? Create a new group or browse existing communities to begin earning with DeFi yields.
-                </p>
-                <div className="space-y-3">
-                  <button
-                    onClick={() => setActiveTab('create-group')}
-                    className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 py-3 px-6 rounded-xl font-semibold text-white transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25"
-                  >
-                    Create New Group
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('join-group')}
-                    className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 py-3 px-6 rounded-xl font-semibold text-white transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-emerald-500/25"
-                  >
-                    Browse Groups
-                  </button>
-                </div>
+              <p className="text-gray-300 mb-6">
+                Ready to start your savings journey? Create a new group or browse existing communities to begin earning with DeFi yields.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button
+                  onClick={() => setActiveTab('create-group')}
+                  className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 py-3 px-6 rounded-xl font-semibold text-white transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25"
+                >
+                  Create New Group
+                </button>
+                <button
+                  onClick={() => setActiveTab('join-group')}
+                  className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 py-3 px-6 rounded-xl font-semibold text-white transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-emerald-500/25"
+                >
+                  Browse Groups
+                </button>
               </div>
             </div>
 
@@ -316,6 +279,15 @@ export default function DashboardPage() {
                     </div>
                   </div>
                   <div className="flex items-center space-x-4">
+                    <button
+                      onClick={() => setShowWhyModal(true)}
+                      className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 py-2 px-4 rounded-xl text-white font-medium transition-all duration-300 flex items-center space-x-2"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span>WHY</span>
+                    </button>
                     <div className="bg-gradient-to-r from-crypto-dark-700 to-crypto-dark-800 px-4 py-2 rounded-xl border border-crypto-dark-600">
                       <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>

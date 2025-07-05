@@ -107,7 +107,7 @@ export default function JoinGroupBrowser({ onJoinGroup, isLoading = false }: Joi
     minBid: 0,
     maxBid: 500,
     minMembers: 0,
-    maxMembers: 20,
+    maxMembers: 10,
     cycleType: 'all'
   });
 
