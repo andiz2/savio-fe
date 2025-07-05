@@ -132,30 +132,10 @@ export const SMART_WALLET_ABI = [
 
 // Helper function to create smart wallet configuration for Privy
 export const createSmartWalletConfig = () => {
-  // Check if factory address is provided
-  if (!SMART_WALLET_CONFIG.factoryAddress) {
-    console.warn("⚠️ NEXT_PUBLIC_FACTORY_ADDRESS not set. Using default Biconomy smart wallets.");
-    console.log("✅ Using default Biconomy configuration - no custom factory needed");
-    return {
-      embeddedWallets: {
-        createOnLogin: "all-users" as const,
-        // Use Biconomy's default configuration - no custom settings
-      },
-    };
-  }
-
-  console.log("✅ Using custom factory address:", SMART_WALLET_CONFIG.factoryAddress);
-  console.log("✅ Using entry point address:", SMART_WALLET_CONFIG.entryPointAddress);
-  console.log("✅ Using bundler URL:", SMART_WALLET_CONFIG.bundlerUrl);
-  
+  // Use Privy's default smart wallets (Biconomy)
   return {
     embeddedWallets: {
       createOnLogin: "all-users" as const,
-      factoryAddress: SMART_WALLET_CONFIG.factoryAddress,
-      entryPointAddress: SMART_WALLET_CONFIG.entryPointAddress,
-      bundlerUrl: SMART_WALLET_CONFIG.bundlerUrl,
-      // Add additional configuration for custom factory
-      gasConfig: SMART_WALLET_CONFIG.gasConfig,
     },
   };
 }; 
