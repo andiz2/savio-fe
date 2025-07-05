@@ -277,9 +277,9 @@ export default function CreateGroupForm({ onSubmit, isLoading = false }: CreateG
                 </svg>
                 Creating Group...
               </div>
-            ) : (
-              '🚀 Launch Savings Group'
-            )}
+                         ) : (
+               'Launch Savings Group'
+             )}
           </button>
         </div>
       </form>
