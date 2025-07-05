@@ -19,7 +19,7 @@ export default function CollateralDeposit({
 }: CollateralDepositProps) {
   const [isDepositing, setIsDepositing] = useState(false);
   const [depositAmount, setDepositAmount] = useState(contributionAmount * maxMembers);
-  const [userBalance, setUserBalance] = useState(1000); // Mock USDC balance
+  const [userBalance] = useState(1000); // Mock USDC balance
 
   const totalLumpSum = contributionAmount * maxMembers;
   const eulerYield = 0.07; // 7% APY

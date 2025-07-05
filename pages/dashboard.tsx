@@ -6,21 +6,15 @@ import { useEffect, useState } from "react";
 import CreateGroupForm, { GroupFormData } from "../components/CreateGroupForm";
 import JoinGroupBrowser from "../components/JoinGroupBrowser";
 import CollateralDeposit from "../components/CollateralDeposit";
-import { encodeFunctionData, erc721Abi } from "viem";
-import { mintAbi } from "../components/lib/abis/mint";
-import PaymasterBalance from "../components/PaymasterBalance";
-import { CirclePaymaster } from "../components/lib/paymaster";
 
-const NFT_CONTRACT_ADDRESS =
-  "0x828D1563dfFA00003877114a6940C669C57ec77d" as const;
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { ready, authenticated, user, logout } = usePrivy();
+  const { ready, authenticated, logout } = usePrivy();
   const { client: smartWalletClient } = useSmartWallets();
   const [activeTab, setActiveTab] = useState('overview');
   const [isCreatingGroup, setIsCreatingGroup] = useState(false);
-  const [isJoiningGroup, setIsJoiningGroup] = useState(false);
+
   const [showCollateralDeposit, setShowCollateralDeposit] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState<{
     id: string;
@@ -117,7 +111,7 @@ export default function DashboardPage() {
         );
       case 'join-group':
         return (
-          <JoinGroupBrowser onJoinGroup={handleJoinGroup} isLoading={isJoiningGroup} />
+          <JoinGroupBrowser onJoinGroup={handleJoinGroup} isLoading={false} />
         );
       case 'my-groups':
         return (
