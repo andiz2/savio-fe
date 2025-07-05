@@ -78,7 +78,7 @@ export default function PaymasterBalance() {
         <div className="text-xs text-gray-500">
           <p>Smart Wallet: {smartWalletClient.account.address}</p>
           <p>Paymaster: Circle Paymaster v0.8</p>
-          <p>Network: Sepolia</p>
+          <p>Network: Ethereum Sepolia</p>
         </div>
 
         <div className="bg-green-50 p-3 rounded-md">
@@ -86,7 +86,7 @@ export default function PaymasterBalance() {
             ✅ Paymaster Status:
           </h4>
           <ul className="text-xs text-green-800 space-y-1">
-            <li>• Circle Paymaster v0.8 is available on Sepolia</li>
+            <li>• Circle Paymaster v0.8 is available on Ethereum Sepolia</li>
             <li>• USDC balance checking should work correctly</li>
             <li>• Gas fees can be paid in USDC via Circle Paymaster</li>
             <li>• Users pay gas fees in USDC instead of ETH</li>

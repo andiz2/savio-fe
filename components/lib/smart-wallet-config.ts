@@ -8,6 +8,12 @@ export const SMART_WALLET_CONFIG = {
   // Chain configuration
   chain: sepolia,
   
+  // Entry Point Address (REQUIRED for ERC-4337)
+  entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789" as `0x${string}`,
+  
+  // Bundler configuration
+  bundlerUrl: "https://bundler.biconomy.io/api/v3/11155111/bundler_3ZWviMnNXD7h9URmfW85jDQm",
+  
   // Gas configuration
   gasConfig: {
     maxFeePerGas: "5000000000", // 5 gwei
@@ -129,18 +135,27 @@ export const createSmartWalletConfig = () => {
   // Check if factory address is provided
   if (!SMART_WALLET_CONFIG.factoryAddress) {
     console.warn("⚠️ NEXT_PUBLIC_FACTORY_ADDRESS not set. Using default Biconomy smart wallets.");
+    console.log("✅ Using default Biconomy configuration - no custom factory needed");
     return {
       embeddedWallets: {
         createOnLogin: "all-users" as const,
+        // Use Biconomy's default configuration - no custom settings
       },
     };
   }
 
   console.log("✅ Using custom factory address:", SMART_WALLET_CONFIG.factoryAddress);
+  console.log("✅ Using entry point address:", SMART_WALLET_CONFIG.entryPointAddress);
+  console.log("✅ Using bundler URL:", SMART_WALLET_CONFIG.bundlerUrl);
+  
   return {
     embeddedWallets: {
       createOnLogin: "all-users" as const,
       factoryAddress: SMART_WALLET_CONFIG.factoryAddress,
+      entryPointAddress: SMART_WALLET_CONFIG.entryPointAddress,
+      bundlerUrl: SMART_WALLET_CONFIG.bundlerUrl,
+      // Add additional configuration for custom factory
+      gasConfig: SMART_WALLET_CONFIG.gasConfig,
     },
   };
 }; 

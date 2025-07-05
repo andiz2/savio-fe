@@ -8,8 +8,11 @@ import { mintAbi } from "../components/lib/abis/mint";
 import PaymasterBalance from "../components/PaymasterBalance";
 import { CirclePaymaster } from "../components/lib/paymaster";
 
-const NFT_CONTRACT_ADDRESS =
-  "0x828D1563dfFA00003877114a6940C669C57ec77d" as const;
+// Simple test transaction - send ETH to yourself
+const TEST_TRANSACTION = {
+  to: "0x0000000000000000000000000000000000000000", // Zero address for testing
+  value: "0", // No ETH sent, just testing
+} as const;
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -24,7 +27,7 @@ export default function DashboardPage() {
     }
   }, [ready, authenticated, router]);
 
-  const onMint = async () => {
+  const onSendTestTransaction = async () => {
     if (!smartWalletClient) return;
 
     try {
@@ -42,57 +45,51 @@ export default function DashboardPage() {
         console.log("💡 This is for demonstration of paymaster data generation only");
       }
       
-      // Send regular transaction (works with Privy)
-      await smartWalletClient.sendTransaction({
-        to: NFT_CONTRACT_ADDRESS,
-        data: encodeFunctionData({
-          abi: mintAbi,
-          functionName: "mint",
-          args: [smartWalletClient.account.address],
-        }),
+      // Try a simple transaction first
+      console.log("🔄 Attempting simple transaction...");
+      console.log("Smart Wallet Address:", smartWalletClient.account.address);
+      
+      // Send simple ETH transaction (works with Privy)
+      const tx = await smartWalletClient.sendTransaction({
+        to: smartWalletClient.account.address, // Send to yourself
+        value: 0n, // No ETH sent, just testing
       });
+      
+      console.log("✅ Test transaction sent successfully!");
+      console.log("Transaction Hash:", tx);
+      console.log("🔗 Check transaction on Etherscan");
       
     } catch (error) {
       console.error("Transaction failed:", error);
+      console.log("💡 This might be because the smart wallet needs to be deployed first");
+      console.log("💡 Try using the default Biconomy smart wallets instead");
     } finally {
       setPaymasterLoading(false);
     }
   };
 
-  const onSetApprovalForAll = () => {
+  const onSendSimpleTransaction = () => {
     if (!smartWalletClient) return;
 
     smartWalletClient.sendTransaction({
-      to: NFT_CONTRACT_ADDRESS,
-      data: encodeFunctionData({
-        abi: erc721Abi,
-        functionName: "setApprovalForAll",
-        args: [smartWalletClient.account.address, true],
-      }),
+      to: smartWalletClient.account.address, // Send to yourself
+      value: 0n, // No ETH sent, just testing
     });
   };
 
-  const onBatchTransaction = () => {
+  const onSendBatchTransaction = () => {
     if (!smartWalletClient) return;
 
     smartWalletClient.sendTransaction({
       account: smartWalletClient.account,
       calls: [
         {
-          to: NFT_CONTRACT_ADDRESS,
-          data: encodeFunctionData({
-            abi: mintAbi,
-            functionName: "mint",
-            args: [smartWalletClient.account.address],
-          }),
+          to: smartWalletClient.account.address, // Send to yourself
+          value: 0n, // No ETH sent, just testing
         },
         {
-          to: NFT_CONTRACT_ADDRESS,
-          data: encodeFunctionData({
-            abi: erc721Abi,
-            functionName: "setApprovalForAll",
-            args: [smartWalletClient.account.address, true],
-          }),
+          to: smartWalletClient.account.address, // Send to yourself
+          value: 0n, // No ETH sent, just testing
         },
       ],
     });
@@ -132,7 +129,7 @@ export default function DashboardPage() {
               </div>
               
               <button
-                onClick={onMint}
+                onClick={onSendTestTransaction}
                 disabled={paymasterLoading}
                 className={`text-sm py-2 px-4 rounded-md text-white border-none ${
                   paymasterLoading 
@@ -140,16 +137,84 @@ export default function DashboardPage() {
                     : 'bg-violet-600 hover:bg-violet-700'
                 }`}
               >
-                {paymasterLoading ? 'Processing...' : 'Mint NFT'}
+                {paymasterLoading ? 'Processing...' : 'Send Test Transaction'}
+              </button>
+              
+              <button
+                onClick={async () => {
+                  if (!smartWalletClient) return;
+                  
+                  try {
+                    setPaymasterLoading(true);
+                    console.log("🔄 Testing with simple contract call...");
+                    
+                    // Try calling a simple contract method (like balanceOf)
+                    const tx = await smartWalletClient.sendTransaction({
+                      to: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238", // USDC contract
+                      data: "0x70a082310000000000000000000000000000000000000000000000000000000000000000", // balanceOf(address)
+                    });
+                    
+                    console.log("✅ Contract call successful!");
+                    console.log("Transaction Hash:", tx);
+                    
+                  } catch (error) {
+                    console.error("Contract call failed:", error);
+                  } finally {
+                    setPaymasterLoading(false);
+                  }
+                }}
+                disabled={paymasterLoading}
+                className={`text-sm py-2 px-4 rounded-md text-white border-none ${
+                  paymasterLoading 
+                    ? 'bg-gray-400 cursor-not-allowed' 
+                    : 'bg-blue-600 hover:bg-blue-700'
+                }`}
+              >
+                {paymasterLoading ? 'Testing...' : 'Test Contract Call'}
+              </button>
+              
+              <button
+                onClick={async () => {
+                  if (!smartWalletClient) return;
+                  
+                  try {
+                    setPaymasterLoading(true);
+                    console.log("🔄 Testing factory contract...");
+                    console.log("Factory Address:", process.env.NEXT_PUBLIC_FACTORY_ADDRESS);
+                    
+                    // Try to call the factory contract to check if it exists
+                    const tx = await smartWalletClient.sendTransaction({
+                      to: process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`,
+                      data: "0x", // Empty data to check if contract exists
+                    });
+                    
+                    console.log("✅ Factory contract call successful!");
+                    console.log("Transaction Hash:", tx);
+                    
+                  } catch (error) {
+                    console.error("Factory contract call failed:", error);
+                    console.log("💡 This might mean the factory contract is not deployed or not working");
+                  } finally {
+                    setPaymasterLoading(false);
+                  }
+                }}
+                disabled={paymasterLoading}
+                className={`text-sm py-2 px-4 rounded-md text-white border-none ${
+                  paymasterLoading 
+                    ? 'bg-gray-400 cursor-not-allowed' 
+                    : 'bg-green-600 hover:bg-green-700'
+                }`}
+              >
+                {paymasterLoading ? 'Testing...' : 'Test Factory Contract'}
               </button>
               <button
-                onClick={onSetApprovalForAll}
+                onClick={onSendSimpleTransaction}
                 className="text-sm bg-violet-600 hover:bg-violet-700 py-2 px-4 rounded-md text-white border-none"
               >
-                Approve
+                Simple Transaction
               </button>
               <button
-                onClick={onBatchTransaction}
+                onClick={onSendBatchTransaction}
                 className="text-sm bg-violet-600 hover:bg-violet-700 py-2 px-4 rounded-md text-white border-none"
               >
                 Batch Transaction
@@ -158,15 +223,23 @@ export default function DashboardPage() {
                 onClick={() => {
                   console.log("🔍 Smart Wallet Debug Info:");
                   console.log("Factory Address:", process.env.NEXT_PUBLIC_FACTORY_ADDRESS);
+                  console.log("Entry Point Address:", "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789");
+                  console.log("Bundler URL:", "https://bundler.biconomy.io/api/v3/11155111/bundler_3ZWviMnNXD7h9URmfW85jDQm");
                   console.log("User Smart Wallet:", user?.smartWallet);
                   console.log("Smart Wallet Client:", smartWalletClient);
                   console.log("Smart Wallet Address:", smartWalletClient?.account?.address);
                   console.log("Chain ID:", smartWalletClient?.chain?.id);
                   console.log("Network:", smartWalletClient?.chain?.name);
                   
+                  // Check factory contract on Etherscan
+                  if (process.env.NEXT_PUBLIC_FACTORY_ADDRESS) {
+                    console.log("🔗 Check Factory Contract on Etherscan:");
+                    console.log(`https://sepolia.etherscan.io/address/${process.env.NEXT_PUBLIC_FACTORY_ADDRESS}`);
+                  }
+                  
                   // Check if wallet exists on blockchain
                   if (smartWalletClient?.account?.address) {
-                    console.log("🔗 Check wallet on Sepolia:");
+                    console.log("🔗 Check wallet on Ethereum Sepolia:");
                     console.log(`https://sepolia.etherscan.io/address/${smartWalletClient.account.address}`);
                   }
                 }}
@@ -199,7 +272,7 @@ export default function DashboardPage() {
                     console.log("• This is normal behavior for ERC-4337 smart wallets");
                     
                     console.log("🎯 To verify deployment:");
-                    console.log("1. Send a transaction (like 'Mint NFT')");
+                    console.log("1. Send a transaction (like 'Send Test Transaction')");
                     console.log("2. Check the transaction on Etherscan");
                     console.log("3. The smart wallet will be deployed automatically");
                     
@@ -242,10 +315,10 @@ export default function DashboardPage() {
                     // Test 3: Check paymaster contract
                     console.log("3. Testing paymaster contract...");
                     console.log("✅ Paymaster Address:", "0x3BA9A96eE3eFf3A69E2B18886AcF52027EFF8966");
-                    console.log("✅ Paymaster Network: Sepolia");
+                    console.log("✅ Paymaster Network: Ethereum Sepolia");
                     
                     console.log("🎉 All paymaster tests passed!");
-                    console.log("💡 Note: This test doesn't send transactions. Use 'Mint NFT' with paymaster toggle for real transactions.");
+                    console.log("💡 Note: This test doesn't send transactions. Use 'Send Test Transaction' with paymaster toggle for real transactions.");
                     
                   } catch (error) {
                     console.error("❌ Paymaster test failed:", error);
@@ -268,16 +341,12 @@ export default function DashboardPage() {
                     // Send regular transaction (no paymaster)
                     console.log("📤 Sending transaction to blockchain...");
                     const tx = await smartWalletClient.sendTransaction({
-                      to: NFT_CONTRACT_ADDRESS,
-                      data: encodeFunctionData({
-                        abi: mintAbi,
-                        functionName: "mint",
-                        args: [smartWalletClient.account.address],
-                      }),
+                      to: smartWalletClient.account.address, // Send to yourself
+                      value: 0n, // No ETH sent, just testing
                     });
                     
                     console.log("✅ Transaction sent:", tx);
-                    console.log("🔗 Check transaction on Sepolia:");
+                    console.log("🔗 Check transaction on Ethereum Sepolia:");
                     console.log(`https://sepolia.etherscan.io/tx/${tx}`);
                     
                     alert("Transaction sent! Check console for details.");

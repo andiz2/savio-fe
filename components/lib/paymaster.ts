@@ -2,15 +2,15 @@ import { maxUint256, erc20Abi, parseErc6492Signature, getContract, encodePacked 
 import { createPublicClient, http } from "viem";
 import { sepolia } from "viem/chains";
 
-// Circle Paymaster Configuration for Sepolia
+// Circle Paymaster Configuration for Ethereum Sepolia
 export const PAYMASTER_CONFIG = {
   // Circle Paymaster v0.8 address for Ethereum Sepolia
   paymasterAddress: "0x3BA9A96eE3eFf3A69E2B18886AcF52027EFF8966" as `0x${string}`,
   
-  // USDC address on Sepolia
+  // USDC address on Ethereum Sepolia
   usdcAddress: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238" as `0x${string}`,
   
-  // Chain configuration - Circle Paymaster v0.8 is available on Sepolia
+  // Chain configuration - Circle Paymaster v0.8 is available on Ethereum Sepolia
   chain: sepolia,
   
   // Gas limits for paymaster
@@ -18,11 +18,11 @@ export const PAYMASTER_CONFIG = {
   paymasterPostOpGasLimit: 15000n,
 };
 
-// Circle Paymaster v0.8 is available on Sepolia
+// Circle Paymaster v0.8 is available on Ethereum Sepolia
 // Circle Paymaster v0.8 addresses from https://developers.circle.com/stablecoins/paymaster-addresses:
 // - Ethereum Sepolia: 0x3BA9A96eE3eFf3A69E2B18886AcF52027EFF8966
-// - Arbitrum Sepolia: 0x3BA9A96eE3eFf3A69E2B18886AcF52027EFF8966
 // - Base Sepolia: 0x3BA9A96eE3eFf3A69E2B18886AcF52027EFF8966
+// - Arbitrum Sepolia: 0x3BA9A96eE3eFf3A69E2B18886AcF52027EFF8966
 // - Optimism Sepolia: 0x3BA9A96eE3eFf3A69E2B18886AcF52027EFF8966
 // - Polygon Amoy: 0x3BA9A96eE3eFf3A69E2B18886AcF52027EFF8966
 // - Avalanche Fuji: 0x3BA9A96eE3eFf3A69E2B18886AcF52027EFF8966
