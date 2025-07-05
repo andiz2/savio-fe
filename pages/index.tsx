@@ -26,7 +26,7 @@ export default function SmartAccount() {
   const [isCreating, setIsCreating] = useState(false);
   const [logs, setLogs] = useState<string>("");
   const [open, setOpen] = useState(true);
-  const [credAccount, setCredAccount] = useState<any>();
+  const [_credAccount, setCredAccount] = useState<any>();
 
   const clientKey = process.env.NEXT_PUBLIC_CLIENT_KEY as string;
   const clientUrl = process.env.NEXT_PUBLIC_CLIENT_URL as string;
