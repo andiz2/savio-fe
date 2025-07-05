@@ -205,7 +205,7 @@ export default function CollateralDeposit({
 
         {/* Warning */}
         <div className="mt-4 text-xs text-gray-400 text-center">
-          <p>By depositing, you agree to the group's terms and acknowledge that your USDC will be locked until the group cycle completes.</p>
+          <p>By depositing, you agree to the group&apos;s terms and acknowledge that your USDC will be locked until the group cycle completes.</p>
         </div>
         </div>
       </div>

@@ -83,7 +83,7 @@ export default function PreDepositSuccess({
               </svg>
             </div>
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">Pre-deposit Successful!</h2>
-            <p className="text-gray-400 text-sm md:text-base">You're now ready to participate in the ROSCA group</p>
+                            <p className="text-gray-400 text-sm md:text-base">You&apos;re now ready to participate in the ROSCA group</p>
           </div>
 
           {/* Transaction Details */}

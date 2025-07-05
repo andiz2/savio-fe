@@ -141,7 +141,7 @@ export default function DepositSuccess({
               <div>
                 <h4 className="text-white font-medium mb-1 text-sm md:text-base">Pre-deposit for Gasless Experience</h4>
                 <p className="text-gray-400 text-xs md:text-sm">
-                  Add funds to your smart wallet for seamless, gasless transactions using Circle's account abstraction.
+                  Add funds to your smart wallet for seamless, gasless transactions using Circle&apos;s account abstraction.
                 </p>
               </div>
             </div>

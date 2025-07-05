@@ -479,8 +479,8 @@ export default function DashboardPage() {
                         </span>
                       </div>
                     </div>
-                    <button
-                      onClick={logout}
+              <button
+                onClick={logout}
                       className="bg-gradient-to-r from-crypto-dark-700 to-crypto-dark-800 hover:from-crypto-dark-600 hover:to-crypto-dark-700 py-2 px-4 rounded-xl text-gray-300 transition-all duration-300 border border-crypto-dark-600 hover:border-crypto-dark-500 transform hover:scale-105"
                     >
                       <div className="flex items-center space-x-2">
@@ -512,7 +512,7 @@ export default function DashboardPage() {
                       >
                         <span className="text-lg">{tab.icon}</span>
                         <span>{tab.name}</span>
-                      </button>
+              </button>
                     ))}
                   </div>
                 </nav>
@@ -597,8 +597,8 @@ export default function DashboardPage() {
                     <div className="bg-crypto-dark-700/30 rounded-xl p-6 border border-crypto-dark-600">
                       <h3 className="text-lg font-semibold text-white mb-3">The Problem</h3>
                       <p className="leading-relaxed">
-                        Traditional rotating savings groups (ROSCAs) have been around for centuries, but they're plagued by trust issues, 
-                        manual management, and lack of transparency. People lose money to dishonest administrators, and there's no way 
+                        Traditional rotating savings groups (ROSCAs) have been around for centuries, but they&apos;re plagued by trust issues, 
+                        manual management, and lack of transparency. People lose money to dishonest administrators, and there&apos;s no way 
                         to earn yields on locked funds.
                       </p>
                     </div>
@@ -616,7 +616,7 @@ export default function DashboardPage() {
                       <h3 className="text-lg font-semibold text-white mb-3">The Vision</h3>
                       <p className="leading-relaxed">
                         We envision a world where communities can build wealth together without intermediaries. 
-                        Whether it's families, friends, or strangers with shared goals, Savio provides the infrastructure 
+                        Whether it&apos;s families, friends, or strangers with shared goals, Savio provides the infrastructure 
                         for collaborative financial growth powered by DeFi.
                       </p>
                     </div>
@@ -656,23 +656,23 @@ export default function DashboardPage() {
                         readOnly
                         className="flex-1 bg-transparent text-white font-mono text-sm mr-3"
                       />
-                      <button
+              <button
                         onClick={() => navigator.clipboard.writeText(createdGroupLink)}
                         className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 px-4 py-2 rounded-lg text-white font-medium transition-all duration-300"
-                      >
+              >
                         Copy
-                      </button>
+              </button>
                     </div>
                   </div>
                   
                   <div className="space-y-3">
-                    <button
+              <button
                       onClick={() => setShowInviteModal(false)}
                       className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 py-3 px-6 rounded-xl font-semibold text-white transition-all duration-300"
-                    >
+              >
                       Continue to Dashboard
-                    </button>
-                    <button
+              </button>
+              <button
                       onClick={() => {
                         setShowInviteModal(false);
                         setActiveTab('my-groups');
@@ -680,8 +680,8 @@ export default function DashboardPage() {
                       className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 py-3 px-6 rounded-xl font-semibold text-white transition-all duration-300"
                     >
                       View My Groups
-                    </button>
-                  </div>
+              </button>
+            </div>
                 </div>
               </div>
             )}
