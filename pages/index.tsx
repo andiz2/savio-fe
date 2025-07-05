@@ -44,28 +44,31 @@ export default function LoginPage() {
       </Head>
 
       <main className="flex min-h-screen min-w-full">
-        <div className="flex bg-gradient-to-br from-blue-50 to-indigo-100 flex-1 p-6 justify-center items-center">
-          <div className="max-w-2xl text-center">
+        <div className="flex bg-gradient-to-br from-crypto-dark-950 via-crypto-dark-900 to-purple-950 flex-1 p-6 justify-center items-center relative overflow-hidden">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%239C92AC" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
+          
+          <div className="max-w-2xl text-center relative z-10">
             <div className="mb-8">
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                Welcome to <span className="text-indigo-600">Savio</span>
+              <h1 className="text-5xl font-bold text-white mb-4">
+                Welcome to <span className="bg-gradient-to-r from-purple-400 to-emerald-400 bg-clip-text text-transparent">Savio</span>
               </h1>
-              <p className="text-xl text-gray-600 mb-6">
+              <p className="text-xl text-gray-300 mb-8">
                 The revolutionary on-chain rotating savings protocol
               </p>
-              <div className="bg-white rounded-lg p-6 shadow-lg mb-8">
-                <h2 className="text-lg font-semibold text-gray-800 mb-4">How it works</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
+              <div className="bg-crypto-dark-800/50 backdrop-blur-sm border border-crypto-dark-700 rounded-xl p-8 shadow-2xl mb-8">
+                <h2 className="text-lg font-semibold text-white mb-6">How it works</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-gray-300">
                   <div className="flex flex-col items-center">
-                    <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold mb-2">1</div>
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold mb-3 shadow-lg">1</div>
                     <p>Create or join a savings group</p>
                   </div>
                   <div className="flex flex-col items-center">
-                    <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold mb-2">2</div>
+                    <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center text-white font-bold mb-3 shadow-lg">2</div>
                     <p>Contribute USDC and earn 7% yield</p>
                   </div>
                   <div className="flex flex-col items-center">
-                    <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold mb-2">3</div>
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold mb-3 shadow-lg">3</div>
                     <p>Bid or get randomly selected for lump sum</p>
                   </div>
                 </div>
@@ -73,13 +76,13 @@ export default function LoginPage() {
             </div>
             <div className="flex justify-center">
               <button
-                className="bg-indigo-600 hover:bg-indigo-700 py-4 px-8 text-white rounded-lg font-semibold text-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
+                className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 py-4 px-8 text-white rounded-xl font-semibold text-lg transition-all duration-200 shadow-xl hover:shadow-2xl hover:scale-105 border border-purple-500/20"
                 onClick={login}
               >
                 Get Started with Savio
               </button>
             </div>
-            <p className="text-sm text-gray-500 mt-4">
+            <p className="text-sm text-gray-400 mt-6">
               Connect your wallet or create a smart account to begin
             </p>
           </div>
