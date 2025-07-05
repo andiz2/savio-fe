@@ -3,6 +3,7 @@ import { useSmartWallets } from "@privy-io/react-auth/smart-wallets";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import CreateGroupForm, { GroupFormData } from "../components/CreateGroupForm";
 import { encodeFunctionData, erc721Abi } from "viem";
 import { mintAbi } from "../components/lib/abis/mint";
 import PaymasterBalance from "../components/PaymasterBalance";
@@ -16,6 +17,7 @@ export default function DashboardPage() {
   const { ready, authenticated, user, logout } = usePrivy();
   const { client: smartWalletClient } = useSmartWallets();
   const [activeTab, setActiveTab] = useState('overview');
+  const [isCreatingGroup, setIsCreatingGroup] = useState(false);
 
   useEffect(() => {
     if (ready && !authenticated) {
@@ -30,6 +32,22 @@ export default function DashboardPage() {
     { id: 'my-groups', name: 'My Groups', icon: '👥' },
     { id: 'portfolio', name: 'Portfolio', icon: '💼' },
   ];
+
+  const handleCreateGroup = async (formData: GroupFormData) => {
+    setIsCreatingGroup(true);
+    try {
+      // TODO: Implement smart contract interaction
+      console.log('Creating group with data:', formData);
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      alert('Group created successfully! (Demo mode)');
+    } catch (error) {
+      console.error('Failed to create group:', error);
+      alert('Failed to create group. Please try again.');
+    } finally {
+      setIsCreatingGroup(false);
+    }
+  };
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -60,13 +78,7 @@ export default function DashboardPage() {
         );
       case 'create-group':
         return (
-          <div className="bg-white rounded-lg p-6 shadow-sm">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Create New Savings Group</h2>
-            <p className="text-gray-600 mb-6">Set up a new rotating savings group and invite members to join.</p>
-            <div className="text-center py-8">
-              <p className="text-gray-500">Create group form coming in next step...</p>
-            </div>
-          </div>
+          <CreateGroupForm onSubmit={handleCreateGroup} isLoading={isCreatingGroup} />
         );
       case 'join-group':
         return (
