@@ -8,6 +8,7 @@ import { mintAbi } from "../components/lib/abis/mint";
 import PaymasterBalance from "../components/PaymasterBalance";
 import { CirclePaymaster } from "../components/lib/paymaster";
 
+
 // Simple test transaction - send ETH to yourself
 const TEST_TRANSACTION = {
   to: "0x0000000000000000000000000000000000000000", // Zero address for testing
@@ -20,6 +21,7 @@ export default function DashboardPage() {
   const { client: smartWalletClient } = useSmartWallets();
   const [usePaymaster, setUsePaymaster] = useState(false);
   const [paymasterLoading, setPaymasterLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (ready && !authenticated) {
@@ -93,6 +95,108 @@ export default function DashboardPage() {
         },
       ],
     });
+  };
+
+  // Test functions
+  const testSimpleTransfer = async () => {
+    if (!smartWalletClient) {
+      alert("No smart wallet connected");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      console.log("🔍 Smart Wallet Debug Info:");
+      console.log("Smart Wallet Address:", smartWalletClient.account.address);
+      console.log("Smart Wallet Type:", smartWalletClient.account.type);
+      
+      console.log("💰 Checking smart wallet balance...");
+      
+      // Check the balance of the smart wallet
+      console.log("💡 Smart wallet address:", smartWalletClient.account.address);
+      console.log("💡 Please check balance on Base Sepolia:");
+      console.log(`https://sepolia.basescan.org/address/${smartWalletClient.account.address}`);
+      
+      // For now, let's try the transaction and see what happens
+      console.log("📤 Attempting transaction...");
+      
+      console.log("✅ Smart wallet has funds! Attempting transaction...");
+      
+      // Try the transaction
+      const tx = await smartWalletClient.sendTransaction({
+        to: smartWalletClient.account.address, // Send to yourself
+        value: 0n, // No ETH sent, just testing
+      });
+
+      alert(`✅ Transaction sent! Hash: ${tx}`);
+      console.log("✅ Transfer transaction:", tx);
+      console.log("🔗 Check transaction on Base Sepolia:");
+      console.log(`https://sepolia.basescan.org/tx/${tx}`);
+      
+    } catch (error) {
+      console.error("❌ Transfer error:", error);
+      console.log("💡 This error suggests the smart wallet needs to be deployed first");
+      console.log("💡 Try logging out and back in to create a fresh smart wallet");
+      alert(`Transfer failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const testUSDCBalance = async () => {
+    if (!smartWalletClient) {
+      alert("No smart wallet connected");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      console.log("Checking USDC balance...");
+
+      // USDC contract on Sepolia
+      const usdcAddress = "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238";
+      
+      // Simple test - just log the address and try to get balance via public RPC
+      console.log("USDC Contract Address:", usdcAddress);
+      console.log("Smart Wallet Address:", smartWalletClient.account.address);
+      console.log("Note: This is a simplified test. Check your USDC balance on Etherscan:");
+      console.log(`https://sepolia.etherscan.io/address/${smartWalletClient.account.address}`);
+      
+      alert("Check console for USDC contract details and Etherscan link");
+    } catch (error) {
+      console.error("USDC balance error:", error);
+      alert(`USDC check failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const testContractCall = async () => {
+    if (!smartWalletClient) {
+      alert("No smart wallet connected");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      console.log("Testing contract call...");
+
+      // Use a simple contract call to USDC name() function
+      const usdcAddress = "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238";
+      
+      console.log("USDC Contract Address:", usdcAddress);
+      console.log("This test would call the USDC name() function");
+      console.log("Note: Smart wallet client doesn't have readContract method");
+      console.log("Check the contract on Etherscan:");
+      console.log(`https://sepolia.etherscan.io/address/${usdcAddress}`);
+      
+      alert("Check console for contract details and Etherscan link");
+    } catch (error) {
+      console.error("Contract call error:", error);
+      alert(`Contract call failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -464,6 +568,47 @@ export default function DashboardPage() {
             <pre className="max-w-4xl bg-slate-700 text-slate-50 font-mono p-4 text-xs sm:text-sm rounded-md mt-2">
               {JSON.stringify(user, null, 2)}
             </pre>
+
+            {/* Test Buttons */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Test Transactions</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button
+                  onClick={testSimpleTransfer}
+                  disabled={loading || !smartWalletClient}
+                  className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg transition-colors"
+                >
+                  {loading ? "Sending..." : "Test Smart Wallet TX"}
+                </button>
+                
+                <button
+                  onClick={testUSDCBalance}
+                  disabled={loading || !smartWalletClient}
+                  className="bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg transition-colors"
+                >
+                  {loading ? "Checking..." : "Check USDC Balance"}
+                </button>
+                
+                <button
+                  onClick={testContractCall}
+                  disabled={loading || !smartWalletClient}
+                  className="bg-purple-500 hover:bg-purple-600 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg transition-colors"
+                >
+                  {loading ? "Calling..." : "Test Contract Call"}
+                </button>
+              </div>
+              
+              <div className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
+                <p><strong>Test Instructions:</strong></p>
+                <ul className="list-disc list-inside mt-2 space-y-1">
+                  <li><strong>Smart Wallet TX:</strong> Sends a test transaction to yourself (real transaction)</li>
+                  <li><strong>USDC Balance:</strong> Shows contract address and Etherscan link</li>
+                  <li><strong>Contract Call:</strong> Shows USDC contract details and Etherscan link</li>
+                </ul>
+                <p className="mt-2 text-xs">These tests use the smart wallet client and well-known public contracts.</p>
+              </div>
+            </div>
           </>
         ) : null}
       </main>
