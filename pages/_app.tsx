@@ -53,7 +53,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           },
         }}
       >
-        <SmartWalletsProvider>
+        <SmartWalletsProvider config={createSmartWalletConfig()}>
           <Component {...pageProps} />
         </SmartWalletsProvider>
       </PrivyProvider>

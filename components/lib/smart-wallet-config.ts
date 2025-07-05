@@ -1,18 +1,18 @@
-import { sepolia } from "viem/chains";
+import { baseSepolia } from "viem/chains";
 
 // Smart Wallet Factory Configuration
 export const SMART_WALLET_CONFIG = {
   // Your deployed factory contract address (REQUIRED)
-  factoryAddress: process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`,
+  factoryAddress: "0x5b86fAcC8c1350D970f25DE9c481CDDA91d1C818" as `0x${string}`,
   
   // Chain configuration
-  chain: sepolia,
+  chain: baseSepolia,
   
   // Entry Point Address (REQUIRED for ERC-4337)
   entryPointAddress: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789" as `0x${string}`,
   
-  // Bundler configuration
-  bundlerUrl: "https://bundler.biconomy.io/api/v3/11155111/bundler_3ZWviMnNXD7h9URmfW85jDQm",
+  // Bundler configuration for Base Sepolia
+  bundlerUrl: "https://bundler.biconomy.io/api/v3/84532/bundler_3ZWviMnNXD7h9URmfW85jDQm",
   
   // Gas configuration
   gasConfig: {
