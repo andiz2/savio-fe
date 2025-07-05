@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   toCircleSmartAccount,
   toModularTransport,
@@ -25,11 +25,17 @@ export default function SmartAccount() {
   const { login, logout, authenticated, user } = usePrivy();
   const [isCreating, setIsCreating] = useState(false);
   const [logs, setLogs] = useState<string>("");
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [_credAccount, setCredAccount] = useState<any>();
 
   const clientKey = process.env.NEXT_PUBLIC_CLIENT_KEY as string;
   const clientUrl = process.env.NEXT_PUBLIC_CLIENT_URL as string;
+
+  useEffect(() => {
+    if(user) {
+      setOpen(true)
+    }
+  }, [user])
 
   const createSmartWallet = async () => {
     if (!authenticated) {

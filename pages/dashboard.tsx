@@ -155,7 +155,7 @@ const mockGroups = [
 ];
 
 export default function DashboardPage() {
-    const { walletData } = useAuth();
+    const { walletData, onInviteModalOpen, showInviteModal } = useAuth();
   const router = useRouter();
   const { ready, authenticated, logout } = usePrivy();
   const [activeTab, setActiveTab] = useState('overview');
@@ -188,8 +188,9 @@ export default function DashboardPage() {
     { id: 'portfolio', name: 'Portfolio', icon: '💼' },
   ];
 
+  console.log("showInviteModal", showInviteModal)
+
   const [showWhyModal, setShowWhyModal] = useState(false);
-  const [showInviteModal, setShowInviteModal] = useState(false);
   const [createdGroupLink, _setCreatedGroupLink] = useState('');
 
   const handleCreateGroup = async (formData: GroupFormData) => {
@@ -199,7 +200,7 @@ export default function DashboardPage() {
       // TODO: Implement smart contract interaction
       console.log('Creating group with data:', formData);
       // Simulate API call
-      CREATE_GROUP({walletData, period: 4, totalMembers: formData.maxMembers, pledgeAmount: formData.contributionAmount * formData.maxMembers})
+      CREATE_GROUP({walletData, period: 4, totalMembers: formData.maxMembers, pledgeAmount: formData.contributionAmount * formData.maxMembers, onInviteModalOpen})
     } catch (error) {
       console.error('Failed to create group:', error);
       alert('Failed to create group. Please try again.');
@@ -651,14 +652,14 @@ export default function DashboardPage() {
                   
                   <div className="space-y-3">
               <button
-                      onClick={() => setShowInviteModal(false)}
+                      onClick={() => onInviteModalOpen(false)}
                       className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 py-3 px-6 rounded-xl font-semibold text-white transition-all duration-300"
               >
                       Continue to Dashboard
               </button>
               <button
                       onClick={() => {
-                        setShowInviteModal(false);
+                        onInviteModalOpen(false);
                         setActiveTab('my-groups');
                       }}
                       className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 py-3 px-6 rounded-xl font-semibold text-white transition-all duration-300"
