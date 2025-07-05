@@ -155,7 +155,7 @@ const mockGroups = [
 ];
 
 export default function DashboardPage() {
-    const { walletData, onInviteModalOpen, showInviteModal } = useAuth();
+    const { walletData, onInviteModalOpen, showInviteModal, onInviteModalClose } = useAuth();
   const router = useRouter();
   const { ready, authenticated, logout } = usePrivy();
   const [activeTab, setActiveTab] = useState('overview');
@@ -659,7 +659,7 @@ export default function DashboardPage() {
               </button>
               <button
                       onClick={() => {
-                        onInviteModalOpen(false);
+                        onInviteModalClose();
                         setActiveTab('my-groups');
                       }}
                       className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 py-3 px-6 rounded-xl font-semibold text-white transition-all duration-300"

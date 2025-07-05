@@ -15,9 +15,13 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     setShowInviteModal(true);
   }, []);
 
+     const onInviteModalClose = useCallback(() => {
+      setShowInviteModal(false);
+    }, []);
+
 
   return (
-    <DataContext.Provider value={{ walletData, setWalletData, showInviteModal, onInviteModalOpen }}>
+    <DataContext.Provider value={{ walletData, setWalletData, showInviteModal, onInviteModalOpen, onInviteModalClose }}>
       {children}
     </DataContext.Provider>
   );
