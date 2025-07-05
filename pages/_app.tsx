@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import { PrivyProvider } from "@privy-io/react-auth";
 import { polygonAmoy } from "viem/chains";
+import { DataProvider } from "../context/DataContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const privyAppId = process.env.NEXT_PUBLIC_PRIVY_APP_ID;
@@ -46,17 +47,19 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       
       {hasPrivyConfig ? (
-        <PrivyProvider
-          appId={privyAppId}
-          config={{
-            defaultChain: polygonAmoy,
-            supportedChains: [polygonAmoy],
-            embeddedWallets: {
-              createOnLogin: "all-users",
-            },
-          }}
-        >
+          <PrivyProvider
+            appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ""}
+            config={{
+              defaultChain: polygonAmoy,
+              supportedChains: [polygonAmoy],
+              embeddedWallets: {
+                createOnLogin: "all-users" as const,
+              },
+            }}
+          >
+            <DataProvider>
           <Component {...pageProps} />
+          </DataProvider>
         </PrivyProvider>
       ) : (
         <div className="min-h-screen bg-gradient-to-br from-crypto-dark-950 via-crypto-dark-900 to-purple-950 flex items-center justify-center">
