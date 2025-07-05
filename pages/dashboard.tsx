@@ -190,7 +190,7 @@ export default function DashboardPage() {
 
   const [showWhyModal, setShowWhyModal] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
-  const [createdGroupLink, setCreatedGroupLink] = useState('');
+  const [createdGroupLink, _setCreatedGroupLink] = useState('');
 
   const handleCreateGroup = async (formData: GroupFormData) => {
     console.log("formData", formData)
