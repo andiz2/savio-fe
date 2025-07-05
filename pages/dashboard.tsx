@@ -114,6 +114,18 @@ export default function DashboardPage() {
               >
                 Logout
               </button>
+              
+              <button
+                onClick={() => {
+                  console.log("🔄 Clearing smart wallet cache...");
+                  console.log("💡 Please log out and log back in to get a fresh smart wallet");
+                  console.log("💡 This will clear any cached smart wallet data");
+                  alert("Please log out and log back in to get a fresh smart wallet!");
+                }}
+                className="text-sm bg-red-200 hover:text-red-900 py-2 px-4 rounded-md text-red-700"
+              >
+                Clear Cache
+              </button>
             </div>
             <div className="mt-12 flex gap-4 flex-wrap items-center">
               <div className="flex items-center space-x-2">
@@ -171,6 +183,41 @@ export default function DashboardPage() {
                 }`}
               >
                 {paymasterLoading ? 'Testing...' : 'Test Contract Call'}
+              </button>
+              
+              <button
+                onClick={async () => {
+                  if (!smartWalletClient) return;
+                  
+                  try {
+                    setPaymasterLoading(true);
+                    console.log("🔄 Testing with minimal transaction...");
+                    
+                    // Try a minimal transaction with no data
+                    const tx = await smartWalletClient.sendTransaction({
+                      to: "0x0000000000000000000000000000000000000000", // Zero address
+                      value: 0n,
+                      data: "0x", // Empty data
+                    });
+                    
+                    console.log("✅ Minimal transaction successful!");
+                    console.log("Transaction Hash:", tx);
+                    
+                  } catch (error) {
+                    console.error("Minimal transaction failed:", error);
+                    console.log("💡 This suggests a fundamental configuration issue");
+                  } finally {
+                    setPaymasterLoading(false);
+                  }
+                }}
+                disabled={paymasterLoading}
+                className={`text-sm py-2 px-4 rounded-md text-white border-none ${
+                  paymasterLoading 
+                    ? 'bg-gray-400 cursor-not-allowed' 
+                    : 'bg-yellow-600 hover:bg-yellow-700'
+                }`}
+              >
+                {paymasterLoading ? 'Testing...' : 'Test Minimal TX'}
               </button>
               
               <button

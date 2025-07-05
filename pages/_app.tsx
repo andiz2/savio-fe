@@ -48,7 +48,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         config={{
           defaultChain: sepolia,
           supportedChains: [sepolia],
-          ...createSmartWalletConfig(),
+          embeddedWallets: {
+            createOnLogin: "all-users" as const,
+          },
         }}
       >
         <SmartWalletsProvider>
