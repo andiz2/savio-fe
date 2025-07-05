@@ -5,6 +5,9 @@ interface CollateralDepositProps {
   groupName: string;
   contributionAmount: number;
   maxMembers: number;
+  currentMembers: number;
+  timeframe: '72h' | 'weekly' | 'monthly';
+  biddingEnabled: boolean;
   onDepositComplete: (txHash: string) => void;
   onCancel: () => void;
 }
@@ -14,6 +17,9 @@ export default function CollateralDeposit({
   groupName, 
   contributionAmount, 
   maxMembers, 
+  currentMembers,
+  timeframe,
+  biddingEnabled,
   onDepositComplete, 
   onCancel 
 }: CollateralDepositProps) {
@@ -24,6 +30,15 @@ export default function CollateralDeposit({
   const totalLumpSum = contributionAmount * maxMembers;
   const eulerYield = 0.07; // 7% APY
   const estimatedEarnings = totalLumpSum * eulerYield;
+  
+  const formatTimeframe = (timeframe: string) => {
+    switch (timeframe) {
+      case '72h': return 'Every 72 hours';
+      case 'weekly': return 'Weekly';
+      case 'monthly': return 'Monthly';
+      default: return timeframe;
+    }
+  };
 
   const handleDeposit = async () => {
     setIsDepositing(true);
@@ -78,7 +93,10 @@ export default function CollateralDeposit({
         <div className="bg-gray-50 rounded-lg p-4 mb-6">
           <h3 className="font-medium text-gray-900 mb-2">{groupName}</h3>
           <div className="text-sm text-gray-600 space-y-1">
-            <p>• {maxMembers} members × {contributionAmount} USDC each</p>
+            <p>• {currentMembers}/{maxMembers} members ({maxMembers - currentMembers} spots left)</p>
+            <p>• {contributionAmount} USDC per member</p>
+            <p>• {formatTimeframe(timeframe)} cycles</p>
+            <p>• {biddingEnabled ? 'Bidding enabled' : 'Random selection'}</p>
             <p>• Total lump sum: {totalLumpSum.toFixed(2)} USDC</p>
             <p>• Collateral required: {totalLumpSum.toFixed(2)} USDC</p>
           </div>

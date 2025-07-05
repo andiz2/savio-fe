@@ -22,8 +22,9 @@ export default function DepositSuccess({
   onClose 
 }: DepositSuccessProps) {
   const [isPreDepositing, setIsPreDepositing] = useState(false);
-  const [preDepositAmount, setPreDepositAmount] = useState(contributionAmount);
-  const [biddingAmount, setBiddingAmount] = useState(contributionAmount);
+  const [biddingInput, setBiddingInput] = useState((contributionAmount * 0.1).toString());
+  
+  const biddingAmount = parseFloat(biddingInput) || 0;
   
   const totalPool = contributionAmount * maxMembers;
   const blockExplorerUrl = `https://sepolia.etherscan.io/tx/${txHash}`;
@@ -32,7 +33,7 @@ export default function DepositSuccess({
     setIsPreDepositing(true);
     try {
       // TODO: Implement gasless pre-deposit using Circle smart wallet
-      console.log('Pre-depositing:', preDepositAmount);
+      console.log('Pre-depositing:', contributionAmount);
       
       // Simulate transaction
       await new Promise(resolve => setTimeout(resolve, 3000));
@@ -171,6 +172,24 @@ export default function DepositSuccess({
           </div>
         </div>
 
+        {/* Warning Section */}
+        <div className="bg-gradient-to-br from-red-500/10 to-red-600/10 border border-red-500/20 rounded-2xl p-4 md:p-6 mb-6">
+          <div className="flex items-start space-x-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center flex-shrink-0">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-2">Important Warning</h3>
+              <p className="text-gray-300 text-sm leading-relaxed">
+                If you stop contributing to the group, your collateral may be slashed. 
+                Ensure you can commit to the full contribution schedule before proceeding.
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Pre-deposit Section */}
         <div className="bg-gradient-to-br from-emerald-500/10 to-emerald-600/10 border border-emerald-500/20 rounded-2xl p-4 md:p-6 mb-6">
           <div className="flex items-center mb-4">
@@ -188,41 +207,39 @@ export default function DepositSuccess({
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Contribution Amount (USDC)</label>
-              <div className="relative">
+              <div className="flex items-center">
                 <input
                   type="number"
-                  value={preDepositAmount}
-                  onChange={(e) => setPreDepositAmount(parseFloat(e.target.value) || 0)}
-                  className="w-full px-4 py-3 bg-crypto-dark-700/50 border border-crypto-dark-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+                  value={contributionAmount}
+                  readOnly
+                  className="flex-1 px-4 py-3 bg-crypto-dark-600/50 border border-crypto-dark-500 rounded-l-xl text-gray-300 cursor-not-allowed"
                   placeholder={contributionAmount.toString()}
-                  min="0"
-                  step="0.01"
                 />
-                <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none z-10">
+                <div className="px-4 py-3 bg-crypto-dark-600/50 border border-l-0 border-crypto-dark-500 rounded-r-xl">
                   <span className="text-gray-400 font-medium">USDC</span>
                 </div>
               </div>
-              <p className="text-xs text-gray-400 mt-1">This is your weekly/monthly contribution amount</p>
+              <p className="text-xs text-gray-400 mt-1">Fixed contribution amount per cycle</p>
             </div>
             
             {biddingEnabled && (
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">Bidding Amount (USDC)</label>
-                <div className="relative">
+                <div className="flex items-center">
                   <input
                     type="number"
-                    value={biddingAmount}
-                    onChange={(e) => setBiddingAmount(parseFloat(e.target.value) || 0)}
-                    className="w-full px-4 py-3 bg-crypto-dark-700/50 border border-crypto-dark-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                    placeholder={contributionAmount.toString()}
+                    value={biddingInput}
+                    onChange={(e) => setBiddingInput(e.target.value)}
+                    className="flex-1 px-4 py-3 bg-crypto-dark-700/50 border border-crypto-dark-600 rounded-l-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                    placeholder={(contributionAmount * 0.1).toFixed(2)}
                     min="0"
                     step="0.01"
                   />
-                  <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none z-10">
+                  <div className="px-4 py-3 bg-crypto-dark-700/50 border border-l-0 border-crypto-dark-600 rounded-r-xl">
                     <span className="text-gray-400 font-medium">USDC</span>
                   </div>
                 </div>
-                <p className="text-xs text-gray-400 mt-1">Amount you're willing to bid for the lump sum</p>
+                <p className="text-xs text-gray-400 mt-1">Default bid: 10% of contribution amount</p>
               </div>
             )}
             
@@ -230,12 +247,18 @@ export default function DepositSuccess({
               <div className="text-sm text-gray-300 space-y-2">
                 <div className="flex items-center justify-between">
                   <span>Contribution Amount:</span>
-                  <span className="text-white font-medium">{preDepositAmount.toFixed(2)} USDC</span>
+                  <span className="text-white font-medium">{contributionAmount.toFixed(2)} USDC</span>
                 </div>
                 {biddingEnabled && (
                   <div className="flex items-center justify-between">
                     <span>Bidding Amount:</span>
                     <span className="text-purple-400 font-medium">{biddingAmount.toFixed(2)} USDC</span>
+                  </div>
+                )}
+                {biddingEnabled && (
+                  <div className="flex items-center justify-between">
+                    <span>Protocol Fee (20%):</span>
+                    <span className="text-red-400 font-medium">{(biddingAmount * 0.2).toFixed(2)} USDC</span>
                   </div>
                 )}
                 <div className="flex items-center justify-between">
@@ -244,12 +267,17 @@ export default function DepositSuccess({
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Protocol Fee:</span>
-                  <span className="text-white font-medium">0%</span>
+                  <span className="text-white font-medium">{biddingEnabled ? '20%' : '0%'}</span>
                 </div>
                 <hr className="my-2 border-crypto-dark-600" />
                 <div className="flex items-center justify-between font-medium">
                   <span>Total:</span>
-                  <span className="text-emerald-400">{preDepositAmount.toFixed(2)} USDC</span>
+                  <span className="text-emerald-400">
+                    {biddingEnabled 
+                      ? (contributionAmount + biddingAmount * 0.2).toFixed(2) 
+                      : contributionAmount.toFixed(2)
+                    } USDC
+                  </span>
                 </div>
               </div>
             </div>
@@ -267,9 +295,9 @@ export default function DepositSuccess({
           
           <button
             onClick={handlePreDeposit}
-            disabled={isPreDepositing || preDepositAmount <= 0}
+            disabled={isPreDepositing || contributionAmount <= 0}
             className={`flex-1 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300 ${
-              isPreDepositing || preDepositAmount <= 0
+              isPreDepositing || contributionAmount <= 0
                 ? 'bg-crypto-dark-600 cursor-not-allowed'
                 : 'bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 shadow-lg hover:shadow-emerald-500/25'
             }`}

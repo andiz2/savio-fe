@@ -32,7 +32,7 @@ const mockGroups: Group[] = [
     maxMembers: 5,
     biddingEnabled: true,
     creator: '0x1234...5678',
-    totalPool: 500,
+    totalPool: 400,
     status: 'open',
     nextRound: '2024-01-15T10:00:00Z'
   },
@@ -46,7 +46,7 @@ const mockGroups: Group[] = [
     maxMembers: 6,
     biddingEnabled: false,
     creator: '0x8765...4321',
-    totalPool: 1000,
+    totalPool: 1250,
     status: 'open',
     nextRound: '2024-02-01T10:00:00Z'
   },
@@ -74,7 +74,7 @@ const mockGroups: Group[] = [
     maxMembers: 4,
     biddingEnabled: true,
     creator: '0xfam1...ly23',
-    totalPool: 300,
+    totalPool: 225,
     status: 'open',
     nextRound: '2024-01-20T10:00:00Z'
   },
@@ -88,9 +88,79 @@ const mockGroups: Group[] = [
     maxMembers: 3,
     biddingEnabled: false,
     creator: '0xhigh...roll',
-    totalPool: 1500,
+    totalPool: 1000,
     status: 'open',
     nextRound: '2024-02-15T10:00:00Z'
+  },
+  {
+    id: '6',
+    name: 'Student Savings Network',
+    description: 'Affordable weekly savings for students and young professionals.',
+    contributionAmount: 25,
+    timeframe: 'weekly',
+    currentMembers: 6,
+    maxMembers: 8,
+    biddingEnabled: true,
+    creator: '0xstud...ent1',
+    totalPool: 150,
+    status: 'open',
+    nextRound: '2024-01-18T10:00:00Z'
+  },
+  {
+    id: '7',
+    name: 'Crypto Enthusiasts',
+    description: 'Monthly group for crypto community members.',
+    contributionAmount: 150,
+    timeframe: 'monthly',
+    currentMembers: 4,
+    maxMembers: 5,
+    biddingEnabled: true,
+    creator: '0xcryp...to1',
+    totalPool: 600,
+    status: 'open',
+    nextRound: '2024-02-10T10:00:00Z'
+  },
+  {
+    id: '8',
+    name: 'Rapid Fire 72h',
+    description: 'Quick 72-hour cycles for active traders.',
+    contributionAmount: 75,
+    timeframe: '72h',
+    currentMembers: 4,
+    maxMembers: 4,
+    biddingEnabled: true,
+    creator: '0xrapi...d1',
+    totalPool: 300,
+    status: 'full',
+    nextRound: '2024-01-14T10:00:00Z'
+  },
+  {
+    id: '9',
+    name: 'Small Business Owners',
+    description: 'Weekly group for small business owners to save together.',
+    contributionAmount: 200,
+    timeframe: 'weekly',
+    currentMembers: 3,
+    maxMembers: 4,
+    biddingEnabled: false,
+    creator: '0xbus1...ness',
+    totalPool: 600,
+    status: 'open',
+    nextRound: '2024-01-22T10:00:00Z'
+  },
+  {
+    id: '10',
+    name: 'Retirement Savers',
+    description: 'Monthly group focused on long-term retirement planning.',
+    contributionAmount: 300,
+    timeframe: 'monthly',
+    currentMembers: 5,
+    maxMembers: 6,
+    biddingEnabled: false,
+    creator: '0xret1...rement',
+    totalPool: 1500,
+    status: 'open',
+    nextRound: '2024-02-05T10:00:00Z'
   }
 ];
 

@@ -7,6 +7,149 @@ import JoinGroupBrowser from "../components/JoinGroupBrowser";
 import CollateralDeposit from "../components/CollateralDeposit";
 import DepositSuccess from "../components/DepositSuccess";
 
+// Mock groups data for demonstration
+const mockGroups = [
+  {
+    id: '1',
+    name: 'Weekly Savers Club',
+    description: 'A group for consistent weekly savings with competitive bidding.',
+    contributionAmount: 100,
+    timeframe: 'weekly' as const,
+    currentMembers: 4,
+    maxMembers: 5,
+    biddingEnabled: true,
+    creator: '0x1234...5678',
+    totalPool: 400,
+    status: 'open' as const,
+    nextRound: '2024-01-15T10:00:00Z'
+  },
+  {
+    id: '2',
+    name: 'Monthly Builders',
+    description: 'Monthly contributions for long-term wealth building.',
+    contributionAmount: 250,
+    timeframe: 'monthly' as const,
+    currentMembers: 5,
+    maxMembers: 6,
+    biddingEnabled: false,
+    creator: '0x8765...4321',
+    totalPool: 1250,
+    status: 'open' as const,
+    nextRound: '2024-02-01T10:00:00Z'
+  },
+  {
+    id: '3',
+    name: 'Quick 72h Group',
+    description: 'Fast-paced savings with 72-hour cycles.',
+    contributionAmount: 50,
+    timeframe: '72h' as const,
+    currentMembers: 5,
+    maxMembers: 5,
+    biddingEnabled: true,
+    creator: '0xabcd...efgh',
+    totalPool: 250,
+    status: 'full' as const,
+    nextRound: '2024-01-12T10:00:00Z'
+  },
+  {
+    id: '4',
+    name: 'Family Savings Circle',
+    description: 'A trusted group for family members to save together.',
+    contributionAmount: 75,
+    timeframe: 'weekly' as const,
+    currentMembers: 3,
+    maxMembers: 4,
+    biddingEnabled: true,
+    creator: '0xfam1...ly23',
+    totalPool: 225,
+    status: 'open' as const,
+    nextRound: '2024-01-20T10:00:00Z'
+  },
+  {
+    id: '5',
+    name: 'High Rollers Club',
+    description: 'Premium savings group with higher contribution amounts.',
+    contributionAmount: 500,
+    timeframe: 'monthly' as const,
+    currentMembers: 2,
+    maxMembers: 3,
+    biddingEnabled: false,
+    creator: '0xhigh...roll',
+    totalPool: 1000,
+    status: 'open' as const,
+    nextRound: '2024-02-15T10:00:00Z'
+  },
+  {
+    id: '6',
+    name: 'Student Savings Network',
+    description: 'Affordable weekly savings for students and young professionals.',
+    contributionAmount: 25,
+    timeframe: 'weekly' as const,
+    currentMembers: 6,
+    maxMembers: 8,
+    biddingEnabled: true,
+    creator: '0xstud...ent1',
+    totalPool: 150,
+    status: 'open' as const,
+    nextRound: '2024-01-18T10:00:00Z'
+  },
+  {
+    id: '7',
+    name: 'Crypto Enthusiasts',
+    description: 'Monthly group for crypto community members.',
+    contributionAmount: 150,
+    timeframe: 'monthly' as const,
+    currentMembers: 4,
+    maxMembers: 5,
+    biddingEnabled: true,
+    creator: '0xcryp...to1',
+    totalPool: 600,
+    status: 'open' as const,
+    nextRound: '2024-02-10T10:00:00Z'
+  },
+  {
+    id: '8',
+    name: 'Rapid Fire 72h',
+    description: 'Quick 72-hour cycles for active traders.',
+    contributionAmount: 75,
+    timeframe: '72h' as const,
+    currentMembers: 4,
+    maxMembers: 4,
+    biddingEnabled: true,
+    creator: '0xrapi...d1',
+    totalPool: 300,
+    status: 'full' as const,
+    nextRound: '2024-01-14T10:00:00Z'
+  },
+  {
+    id: '9',
+    name: 'Small Business Owners',
+    description: 'Weekly group for small business owners to save together.',
+    contributionAmount: 200,
+    timeframe: 'weekly' as const,
+    currentMembers: 3,
+    maxMembers: 4,
+    biddingEnabled: false,
+    creator: '0xbus1...ness',
+    totalPool: 600,
+    status: 'open' as const,
+    nextRound: '2024-01-22T10:00:00Z'
+  },
+  {
+    id: '10',
+    name: 'Retirement Savers',
+    description: 'Monthly group focused on long-term retirement planning.',
+    contributionAmount: 300,
+    timeframe: 'monthly' as const,
+    currentMembers: 5,
+    maxMembers: 6,
+    biddingEnabled: false,
+    creator: '0xret1...rement',
+    totalPool: 1500,
+    status: 'open' as const,
+    nextRound: '2024-02-05T10:00:00Z'
+  }
+];
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -21,6 +164,8 @@ export default function DashboardPage() {
     name: string;
     contributionAmount: number;
     maxMembers: number;
+    currentMembers: number;
+    timeframe: '72h' | 'weekly' | 'monthly';
     biddingEnabled: boolean;
   } | null>(null);
   const [lastTransactionHash, setLastTransactionHash] = useState('');
@@ -65,16 +210,23 @@ export default function DashboardPage() {
 
   const handleJoinGroup = async (groupId: string) => {
     // Find the group details from mock data (in real app, this would come from API)
-    const mockGroup = {
-      id: groupId,
-      name: 'Weekly Savers Club', // This would come from the actual group data
-      contributionAmount: 100,
-      maxMembers: 5,
-      biddingEnabled: true
-    };
+    const group = mockGroups.find(g => g.id === groupId);
     
-    setSelectedGroup(mockGroup);
-    setShowCollateralDeposit(true);
+    if (group) {
+      setSelectedGroup({
+        id: group.id,
+        name: group.name,
+        contributionAmount: group.contributionAmount,
+        maxMembers: group.maxMembers,
+        currentMembers: group.currentMembers,
+        timeframe: group.timeframe,
+        biddingEnabled: group.biddingEnabled
+      });
+      setShowCollateralDeposit(true);
+    } else {
+      console.error('Group not found:', groupId);
+      alert('Group not found. Please try again.');
+    }
   };
 
   const handleDepositComplete = (txHash: string) => {
@@ -366,6 +518,9 @@ export default function DashboardPage() {
                 groupName={selectedGroup.name}
                 contributionAmount={selectedGroup.contributionAmount}
                 maxMembers={selectedGroup.maxMembers}
+                currentMembers={selectedGroup.currentMembers}
+                timeframe={selectedGroup.timeframe}
+                biddingEnabled={selectedGroup.biddingEnabled}
                 onDepositComplete={handleDepositComplete}
                 onCancel={handleDepositCancel}
               />
