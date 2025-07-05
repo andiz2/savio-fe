@@ -2,9 +2,7 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { PrivyProvider } from "@privy-io/react-auth";
-import { SmartWalletsProvider } from "@privy-io/react-auth/smart-wallets";
 import { sepolia } from "viem/chains";
-import { createSmartWalletConfig } from "../components/lib/smart-wallet-config";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const privyAppId = process.env.NEXT_PUBLIC_PRIVY_APP_ID;
@@ -53,12 +51,12 @@ function MyApp({ Component, pageProps }: AppProps) {
           config={{
             defaultChain: sepolia,
             supportedChains: [sepolia],
-            ...createSmartWalletConfig(),
+            embeddedWallets: {
+              createOnLogin: "all-users",
+            },
           }}
         >
-          <SmartWalletsProvider>
-            <Component {...pageProps} />
-          </SmartWalletsProvider>
+          <Component {...pageProps} />
         </PrivyProvider>
       ) : (
         <div className="min-h-screen bg-gradient-to-br from-crypto-dark-950 via-crypto-dark-900 to-purple-950 flex items-center justify-center">

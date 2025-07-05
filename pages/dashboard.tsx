@@ -1,27 +1,29 @@
 import { usePrivy } from "@privy-io/react-auth";
-import { useSmartWallets } from "@privy-io/react-auth/smart-wallets";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import CreateGroupForm, { GroupFormData } from "../components/CreateGroupForm";
 import JoinGroupBrowser from "../components/JoinGroupBrowser";
 import CollateralDeposit from "../components/CollateralDeposit";
+import DepositSuccess from "../components/DepositSuccess";
 
 
 export default function DashboardPage() {
   const router = useRouter();
   const { ready, authenticated, logout } = usePrivy();
-  const { client: smartWalletClient } = useSmartWallets();
   const [activeTab, setActiveTab] = useState('overview');
   const [isCreatingGroup, setIsCreatingGroup] = useState(false);
 
   const [showCollateralDeposit, setShowCollateralDeposit] = useState(false);
+  const [showDepositSuccess, setShowDepositSuccess] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState<{
     id: string;
     name: string;
     contributionAmount: number;
     maxMembers: number;
+    biddingEnabled: boolean;
   } | null>(null);
+  const [lastTransactionHash, setLastTransactionHash] = useState('');
 
   useEffect(() => {
     if (ready && !authenticated) {
@@ -67,7 +69,8 @@ export default function DashboardPage() {
       id: groupId,
       name: 'Weekly Savers Club', // This would come from the actual group data
       contributionAmount: 100,
-      maxMembers: 5
+      maxMembers: 5,
+      biddingEnabled: true
     };
     
     setSelectedGroup(mockGroup);
@@ -76,13 +79,30 @@ export default function DashboardPage() {
 
   const handleDepositComplete = (txHash: string) => {
     setShowCollateralDeposit(false);
-    setSelectedGroup(null);
-    alert(`Deposit successful! Transaction: ${txHash.slice(0, 10)}...`);
+    setLastTransactionHash(txHash);
+    setShowDepositSuccess(true);
     // TODO: Update user's groups list
   };
 
   const handleDepositCancel = () => {
     setShowCollateralDeposit(false);
+    setSelectedGroup(null);
+  };
+
+  const handlePreDeposit = () => {
+    setShowDepositSuccess(false);
+    // TODO: Navigate to group management or show contribution interface
+    alert('Pre-deposit completed! You can now start contributing to your group.');
+  };
+
+  const handleViewGroup = () => {
+    setShowDepositSuccess(false);
+    setActiveTab('my-groups');
+    // TODO: Navigate to specific group details
+  };
+
+  const handleCloseDepositSuccess = () => {
+    setShowDepositSuccess(false);
     setSelectedGroup(null);
   };
 
@@ -261,7 +281,7 @@ export default function DashboardPage() {
       </Head>
 
       <main className="min-h-screen bg-gradient-to-br from-crypto-dark-950 via-purple-950 to-purple-900">
-        {ready && authenticated && smartWalletClient ? (
+        {ready && authenticated ? (
           <>
             {/* Header */}
             <header className="bg-gradient-to-r from-crypto-dark-800/90 to-crypto-dark-900/90 backdrop-blur-sm border-b border-crypto-dark-700 shadow-xl">
@@ -292,7 +312,7 @@ export default function DashboardPage() {
                       <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
                         <span className="text-sm text-gray-300 font-mono">
-                          {smartWalletClient.account?.address?.slice(0, 6)}...{smartWalletClient.account?.address?.slice(-4)}
+                          Connected
                         </span>
                       </div>
                     </div>
@@ -348,6 +368,20 @@ export default function DashboardPage() {
                 maxMembers={selectedGroup.maxMembers}
                 onDepositComplete={handleDepositComplete}
                 onCancel={handleDepositCancel}
+              />
+            )}
+
+            {/* Deposit Success Modal */}
+            {showDepositSuccess && selectedGroup && (
+              <DepositSuccess
+                txHash={lastTransactionHash}
+                groupName={selectedGroup.name}
+                contributionAmount={selectedGroup.contributionAmount}
+                maxMembers={selectedGroup.maxMembers}
+                biddingEnabled={selectedGroup.biddingEnabled}
+                onPreDeposit={handlePreDeposit}
+                onViewGroup={handleViewGroup}
+                onClose={handleCloseDepositSuccess}
               />
             )}
 

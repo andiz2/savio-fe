@@ -23,6 +23,7 @@ export default function CreateGroupForm({ onSubmit, isLoading = false }: CreateG
     biddingEnabled: true,
     description: '',
   });
+  const [maxMembersInput, setMaxMembersInput] = useState('5');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -102,7 +103,7 @@ export default function CreateGroupForm({ onSubmit, isLoading = false }: CreateG
                       step="0.01"
                       required
                     />
-                    <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
+                    <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none z-10">
                       <span className="text-gray-400 font-medium">USDC</span>
                     </div>
                   </div>
@@ -126,15 +127,53 @@ export default function CreateGroupForm({ onSubmit, isLoading = false }: CreateG
                   <label className="block text-sm font-medium text-gray-300 mb-2">Max Members</label>
                   <input
                     type="number"
-                    value={formData.maxMembers}
+                    value={maxMembersInput}
                     onChange={(e) => {
                       const value = e.target.value;
-                      if (value === '' || value === '0') {
-                        handleInputChange('maxMembers', 2);
-                      } else {
-                        const numValue = parseInt(value);
-                        if (!isNaN(numValue) && numValue >= 2 && numValue <= 10) {
+                      
+                      if (value === '') {
+                        setMaxMembersInput(value);
+                        return;
+                      }
+                      
+                      const numValue = parseInt(value);
+                      if (!isNaN(numValue)) {
+                        if (numValue >= 2 && numValue <= 10) {
+                          setMaxMembersInput(value);
                           handleInputChange('maxMembers', numValue);
+                        } else if (numValue > 10) {
+                          // Don't allow typing numbers above 10
+                          return;
+                        } else {
+                          // Allow typing numbers below 2 but don't update form data yet
+                          setMaxMembersInput(value);
+                        }
+                      }
+                    }}
+                    onBlur={(e) => {
+                      const value = e.target.value;
+                      const numValue = parseInt(value);
+                      
+                      if (value === '' || isNaN(numValue) || numValue < 2) {
+                        setMaxMembersInput('2');
+                        handleInputChange('maxMembers', 2);
+                      } else if (numValue > 10) {
+                        setMaxMembersInput('10');
+                        handleInputChange('maxMembers', 10);
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const value = e.currentTarget.value;
+                        const numValue = parseInt(value);
+                        
+                        if (value === '' || isNaN(numValue) || numValue < 2) {
+                          setMaxMembersInput('2');
+                          handleInputChange('maxMembers', 2);
+                        } else if (numValue > 10) {
+                          setMaxMembersInput('10');
+                          handleInputChange('maxMembers', 10);
                         }
                       }
                     }}
