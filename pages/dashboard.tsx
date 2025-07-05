@@ -6,6 +6,7 @@ import CreateGroupForm, { GroupFormData } from "../components/CreateGroupForm";
 import JoinGroupBrowser from "../components/JoinGroupBrowser";
 import CollateralDeposit from "../components/CollateralDeposit";
 import DepositSuccess from "../components/DepositSuccess";
+import PreDepositSuccess from "../components/PreDepositSuccess";
 
 // Mock groups data for demonstration
 const mockGroups = [
@@ -159,6 +160,7 @@ export default function DashboardPage() {
 
   const [showCollateralDeposit, setShowCollateralDeposit] = useState(false);
   const [showDepositSuccess, setShowDepositSuccess] = useState(false);
+  const [showPreDepositSuccess, setShowPreDepositSuccess] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState<{
     id: string;
     name: string;
@@ -167,6 +169,7 @@ export default function DashboardPage() {
     currentMembers: number;
     timeframe: '72h' | 'weekly' | 'monthly';
     biddingEnabled: boolean;
+    biddingAmount?: number;
   } | null>(null);
   const [lastTransactionHash, setLastTransactionHash] = useState('');
 
@@ -241,10 +244,16 @@ export default function DashboardPage() {
     setSelectedGroup(null);
   };
 
-  const handlePreDeposit = () => {
+  const handlePreDeposit = (biddingAmount: number) => {
     setShowDepositSuccess(false);
-    // TODO: Navigate to group management or show contribution interface
-    alert('Pre-deposit completed! You can now start contributing to your group.');
+    // Update selectedGroup with bidding amount
+    if (selectedGroup) {
+      setSelectedGroup({
+        ...selectedGroup,
+        biddingAmount: biddingAmount
+      });
+    }
+    setShowPreDepositSuccess(true);
   };
 
   const handleViewGroup = () => {
@@ -537,6 +546,25 @@ export default function DashboardPage() {
                 onPreDeposit={handlePreDeposit}
                 onViewGroup={handleViewGroup}
                 onClose={handleCloseDepositSuccess}
+              />
+            )}
+
+            {/* Pre-deposit Success Modal */}
+            {showPreDepositSuccess && selectedGroup && (
+              <PreDepositSuccess
+                txHash={lastTransactionHash}
+                groupName={selectedGroup.name}
+                contributionAmount={selectedGroup.contributionAmount}
+                biddingAmount={selectedGroup.biddingAmount || 0}
+                maxMembers={selectedGroup.maxMembers}
+                currentMembers={selectedGroup.currentMembers}
+                timeframe={selectedGroup.timeframe}
+                biddingEnabled={selectedGroup.biddingEnabled}
+                onViewGroup={handleViewGroup}
+                onClose={() => {
+                  setShowPreDepositSuccess(false);
+                  setSelectedGroup(null);
+                }}
               />
             )}
 

@@ -6,7 +6,7 @@ interface DepositSuccessProps {
   contributionAmount: number;
   maxMembers: number;
   biddingEnabled: boolean;
-  onPreDeposit: () => void;
+  onPreDeposit: (biddingAmount: number) => void;
   onViewGroup: () => void;
   onClose: () => void;
 }
@@ -39,7 +39,7 @@ export default function DepositSuccess({
       await new Promise(resolve => setTimeout(resolve, 3000));
       
       alert('Pre-deposit successful! You can now contribute to the pool.');
-      onPreDeposit();
+      onPreDeposit(biddingAmount);
       
     } catch (error) {
       console.error('Pre-deposit failed:', error);
@@ -239,7 +239,7 @@ export default function DepositSuccess({
                     <span className="text-gray-400 font-medium">USDC</span>
                   </div>
                 </div>
-                <p className="text-xs text-gray-400 mt-1">Default bid: 10% of contribution amount</p>
+                <p className="text-xs text-gray-400 mt-1">Default bid: 10% of contribution amount (including 20% protocol fee for winning bid)</p>
               </div>
             )}
             
@@ -255,26 +255,16 @@ export default function DepositSuccess({
                     <span className="text-purple-400 font-medium">{biddingAmount.toFixed(2)} USDC</span>
                   </div>
                 )}
-                {biddingEnabled && (
-                  <div className="flex items-center justify-between">
-                    <span>Protocol Fee (20%):</span>
-                    <span className="text-red-400 font-medium">{(biddingAmount * 0.2).toFixed(2)} USDC</span>
-                  </div>
-                )}
                 <div className="flex items-center justify-between">
                   <span>Network Fee:</span>
                   <span className="text-white font-medium">Free (Gasless)</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span>Protocol Fee:</span>
-                  <span className="text-white font-medium">{biddingEnabled ? '20%' : '0%'}</span>
                 </div>
                 <hr className="my-2 border-crypto-dark-600" />
                 <div className="flex items-center justify-between font-medium">
                   <span>Total:</span>
                   <span className="text-emerald-400">
                     {biddingEnabled 
-                      ? (contributionAmount + biddingAmount * 0.2).toFixed(2) 
+                      ? (contributionAmount + biddingAmount).toFixed(2) 
                       : contributionAmount.toFixed(2)
                     } USDC
                   </span>
