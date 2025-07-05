@@ -51,7 +51,7 @@ export default function DepositSuccess({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-gradient-to-br from-crypto-dark-800 to-crypto-dark-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-crypto-dark-700">
+      <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-700">
         <div className="p-6 md:p-8">
         {/* Success Header */}
         <div className="text-center mb-6">
@@ -107,9 +107,9 @@ export default function DepositSuccess({
             
             <div className="flex items-center justify-between">
               <span className="text-gray-400">Group Type:</span>
-              <span className={`font-medium ${biddingEnabled ? 'text-purple-400' : 'text-blue-400'}`}>
-                {biddingEnabled ? 'Bidding' : 'Random Selection'}
-              </span>
+                                    <span className={`font-medium ${biddingEnabled ? 'text-blue-400' : 'text-green-400'}`}>
+                        {biddingEnabled ? 'Bidding' : 'Random Selection'}
+                      </span>
             </div>
             
             <div className="flex items-center justify-between">
@@ -212,10 +212,10 @@ export default function DepositSuccess({
                   type="number"
                   value={contributionAmount}
                   readOnly
-                  className="flex-1 px-4 py-3 bg-crypto-dark-600/50 border border-crypto-dark-500 rounded-l-xl text-gray-300 cursor-not-allowed"
+                  className="flex-1 px-4 py-3 bg-gray-600/50 border border-gray-500 rounded-l-xl text-gray-300 cursor-not-allowed"
                   placeholder={contributionAmount.toString()}
                 />
-                <div className="px-4 py-3 bg-crypto-dark-600/50 border border-l-0 border-crypto-dark-500 rounded-r-xl">
+                <div className="px-4 py-3 bg-gray-600/50 border border-l-0 border-gray-500 rounded-r-xl">
                   <span className="text-gray-400 font-medium">USDC</span>
                 </div>
               </div>
@@ -230,12 +230,12 @@ export default function DepositSuccess({
                     type="number"
                     value={biddingInput}
                     onChange={(e) => setBiddingInput(e.target.value)}
-                    className="flex-1 px-4 py-3 bg-crypto-dark-700/50 border border-crypto-dark-600 rounded-l-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                    className="flex-1 px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-l-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     placeholder={(contributionAmount * 0.1).toFixed(2)}
                     min="0"
                     step="0.01"
                   />
-                  <div className="px-4 py-3 bg-crypto-dark-700/50 border border-l-0 border-crypto-dark-600 rounded-r-xl">
+                  <div className="px-4 py-3 bg-gray-700/50 border border-l-0 border-gray-600 rounded-r-xl">
                     <span className="text-gray-400 font-medium">USDC</span>
                   </div>
                 </div>
@@ -243,7 +243,7 @@ export default function DepositSuccess({
               </div>
             )}
             
-            <div className="bg-crypto-dark-700/30 rounded-xl p-4 border border-crypto-dark-600">
+            <div className="bg-gray-700/30 rounded-xl p-4 border border-gray-600">
               <div className="text-sm text-gray-300 space-y-2">
                 <div className="flex items-center justify-between">
                   <span>Contribution Amount:</span>
@@ -255,11 +255,8 @@ export default function DepositSuccess({
                     <span className="text-purple-400 font-medium">{biddingAmount.toFixed(2)} USDC</span>
                   </div>
                 )}
-                <div className="flex items-center justify-between">
-                  <span>Network Fee:</span>
-                  <span className="text-white font-medium">Free (Gasless)</span>
-                </div>
-                <hr className="my-2 border-crypto-dark-600" />
+
+                <hr className="my-2 border-gray-600" />
                 <div className="flex items-center justify-between font-medium">
                   <span>Total:</span>
                   <span className="text-emerald-400">
@@ -278,7 +275,7 @@ export default function DepositSuccess({
         <div className="flex space-x-4">
           <button
             onClick={onClose}
-            className="flex-1 px-6 py-3 border border-crypto-dark-600 rounded-xl text-gray-300 hover:text-white hover:bg-crypto-dark-700 transition-all duration-300"
+            className="flex-1 px-6 py-3 border border-gray-600 rounded-xl text-gray-300 hover:text-white hover:bg-gray-700 transition-all duration-300"
           >
             Close
           </button>
@@ -288,7 +285,7 @@ export default function DepositSuccess({
             disabled={isPreDepositing || contributionAmount <= 0}
             className={`flex-1 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300 ${
               isPreDepositing || contributionAmount <= 0
-                ? 'bg-crypto-dark-600 cursor-not-allowed'
+                ? 'bg-gray-600 cursor-not-allowed'
                 : 'bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 shadow-lg hover:shadow-emerald-500/25'
             }`}
           >

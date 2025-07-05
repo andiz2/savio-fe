@@ -298,7 +298,7 @@ export default function JoinGroupBrowser({ onJoinGroup, isLoading = false }: Joi
       </div>
 
                 {/* Search and Filters */}
-          <div className="bg-gradient-to-br from-crypto-dark-800/80 to-crypto-dark-900/80 backdrop-blur-sm border border-crypto-dark-700 rounded-2xl p-6 shadow-xl">
+          <div className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 shadow-xl">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mr-3">
@@ -326,7 +326,7 @@ export default function JoinGroupBrowser({ onJoinGroup, isLoading = false }: Joi
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-4 py-3 bg-crypto-dark-700/50 border border-crypto-dark-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                   placeholder="Search groups by name or description..."
                 />
               </div>
@@ -443,7 +443,7 @@ export default function JoinGroupBrowser({ onJoinGroup, isLoading = false }: Joi
       {/* Groups Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
         {sortedGroups.length === 0 ? (
-          <div className="col-span-full bg-gradient-to-br from-crypto-dark-800/80 to-crypto-dark-900/80 backdrop-blur-sm border border-crypto-dark-700 rounded-2xl p-12 text-center shadow-xl">
+          <div className="col-span-full bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm border border-gray-700 rounded-2xl p-12 text-center shadow-xl">
             <div className="w-16 h-16 bg-gradient-to-br from-gray-500 to-gray-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
@@ -454,7 +454,7 @@ export default function JoinGroupBrowser({ onJoinGroup, isLoading = false }: Joi
           </div>
         ) : (
           sortedGroups.map((group) => (
-            <div key={group.id} className="bg-gradient-to-br from-crypto-dark-800/80 to-crypto-dark-900/80 backdrop-blur-sm border border-crypto-dark-700 rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+            <div key={group.id} className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center">
@@ -496,16 +496,16 @@ export default function JoinGroupBrowser({ onJoinGroup, isLoading = false }: Joi
                   <span className="text-sm text-gray-400">Members</span>
                   <span className="text-sm text-white font-medium">{group.currentMembers}/{group.maxMembers}</span>
                 </div>
-                <div className="w-full bg-crypto-dark-700 rounded-full h-2">
+                <div className="w-full bg-gray-700 rounded-full h-2">
                   <div 
-                    className="bg-gradient-to-r from-purple-500 to-purple-600 h-2 rounded-full transition-all duration-300"
+                    className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-300"
                     style={{ width: `${(group.currentMembers / group.maxMembers) * 100}%` }}
                   ></div>
                 </div>
               </div>
 
               {/* Additional Info */}
-              <div className="bg-crypto-dark-700/30 rounded-xl p-4 mb-6 border border-crypto-dark-600">
+              <div className="bg-gray-700/30 rounded-xl p-4 mb-6 border border-gray-600">
                 <div className="space-y-2 text-sm">
                   <div className="flex items-center justify-between">
                     <span className="text-gray-400">Next Round:</span>
@@ -513,7 +513,7 @@ export default function JoinGroupBrowser({ onJoinGroup, isLoading = false }: Joi
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-gray-400">Bidding:</span>
-                    <span className={`font-medium ${group.biddingEnabled ? 'text-purple-400' : 'text-blue-400'}`}>
+                    <span className={`font-medium ${group.biddingEnabled ? 'text-blue-400' : 'text-green-400'}`}>
                       {group.biddingEnabled ? 'Enabled' : 'Random'}
                     </span>
                   </div>
@@ -521,6 +521,12 @@ export default function JoinGroupBrowser({ onJoinGroup, isLoading = false }: Joi
                     <span className="text-gray-400">Creator:</span>
                     <span className="text-white font-mono text-xs">{group.creator}</span>
                   </div>
+                  {group.biddingEnabled && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-400">Creator Kickback:</span>
+                      <span className="text-emerald-400 font-medium text-xs">5% of protocol fees</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -528,10 +534,10 @@ export default function JoinGroupBrowser({ onJoinGroup, isLoading = false }: Joi
               <button
                 onClick={() => onJoinGroup(group.id)}
                 disabled={isLoading || group.status === 'full'}
-                className={`w-full py-3 px-4 rounded-xl font-semibold text-white transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-purple-500/50 ${
+                className={`w-full py-3 px-4 rounded-xl font-semibold text-white transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-500/50 ${
                   isLoading || group.status === 'full'
-                    ? 'bg-crypto-dark-600 cursor-not-allowed'
-                    : 'bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 shadow-lg hover:shadow-purple-500/25'
+                    ? 'bg-gray-600 cursor-not-allowed'
+                    : 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg hover:shadow-blue-500/25'
                 }`}
               >
                 {group.status === 'full' ? (
@@ -556,7 +562,7 @@ export default function JoinGroupBrowser({ onJoinGroup, isLoading = false }: Joi
       </div>
 
       {/* Stats Footer */}
-      <div className="bg-gradient-to-br from-crypto-dark-800/80 to-crypto-dark-900/80 backdrop-blur-sm border border-crypto-dark-700 rounded-2xl p-6 shadow-xl">
+              <div className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 shadow-xl">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
           <div>
             <p className="text-2xl font-bold text-white">{sortedGroups.length}</p>
@@ -569,7 +575,7 @@ export default function JoinGroupBrowser({ onJoinGroup, isLoading = false }: Joi
             <p className="text-sm text-gray-400">Open for Joining</p>
           </div>
           <div>
-            <p className="text-2xl font-bold text-purple-300">
+            <p className="text-2xl font-bold text-blue-300">
               {sortedGroups.reduce((sum, g) => sum + g.currentMembers, 0)}
             </p>
             <p className="text-sm text-gray-400">Total Members</p>
