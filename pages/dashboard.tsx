@@ -15,8 +15,7 @@ export default function DashboardPage() {
   const router = useRouter();
   const { ready, authenticated, user, logout } = usePrivy();
   const { client: smartWalletClient } = useSmartWallets();
-  const [usePaymaster, setUsePaymaster] = useState(false);
-  const [paymasterLoading, setPaymasterLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState('overview');
 
   useEffect(() => {
     if (ready && !authenticated) {
@@ -24,177 +23,151 @@ export default function DashboardPage() {
     }
   }, [ready, authenticated, router]);
 
-  const onMint = async () => {
-    if (!smartWalletClient) return;
+  const tabs = [
+    { id: 'overview', name: 'Overview', icon: '📊' },
+    { id: 'create-group', name: 'Create Group', icon: '➕' },
+    { id: 'join-group', name: 'Join Group', icon: '🤝' },
+    { id: 'my-groups', name: 'My Groups', icon: '👥' },
+    { id: 'portfolio', name: 'Portfolio', icon: '💼' },
+  ];
 
-    try {
-      if (usePaymaster) {
-        setPaymasterLoading(true);
-        const paymaster = new CirclePaymaster();
-        const paymasterData = await paymaster.getPaymasterData(
-          smartWalletClient.account,
-          10000000n // 10 USDC
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'overview':
+        return (
+          <div className="space-y-6">
+            <div className="bg-white rounded-lg p-6 shadow-sm">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Welcome to Savio</h2>
+              <p className="text-gray-600 mb-4">
+                Start your journey with rotating savings. Create a new group or join an existing one to begin earning.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <h3 className="font-medium text-blue-900">Total Groups</h3>
+                  <p className="text-2xl font-bold text-blue-600">0</p>
+                </div>
+                <div className="bg-green-50 p-4 rounded-lg">
+                  <h3 className="font-medium text-green-900">Total Deposits</h3>
+                  <p className="text-2xl font-bold text-green-600">$0</p>
+                </div>
+                <div className="bg-purple-50 p-4 rounded-lg">
+                  <h3 className="font-medium text-purple-900">Total Earnings</h3>
+                  <p className="text-2xl font-bold text-purple-600">$0</p>
+                </div>
+              </div>
+            </div>
+          </div>
         );
-
-        // For now, just log the paymaster data since Privy's API might not support it directly
-        console.log("🔧 Paymaster Data:", paymasterData);
-        console.log("⚠️ Paymaster integration requires custom implementation");
-        
-        // Fall back to regular transaction
-        await smartWalletClient.sendTransaction({
-          to: NFT_CONTRACT_ADDRESS,
-          data: encodeFunctionData({
-            abi: mintAbi,
-            functionName: "mint",
-            args: [smartWalletClient.account.address],
-          }),
-        });
-      } else {
-        await smartWalletClient.sendTransaction({
-          to: NFT_CONTRACT_ADDRESS,
-          data: encodeFunctionData({
-            abi: mintAbi,
-            functionName: "mint",
-            args: [smartWalletClient.account.address],
-          }),
-        });
-      }
-    } catch (error) {
-      console.error("Transaction failed:", error);
-    } finally {
-      setPaymasterLoading(false);
+      case 'create-group':
+        return (
+          <div className="bg-white rounded-lg p-6 shadow-sm">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Create New Savings Group</h2>
+            <p className="text-gray-600 mb-6">Set up a new rotating savings group and invite members to join.</p>
+            <div className="text-center py-8">
+              <p className="text-gray-500">Create group form coming in next step...</p>
+            </div>
+          </div>
+        );
+      case 'join-group':
+        return (
+          <div className="bg-white rounded-lg p-6 shadow-sm">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Join Existing Group</h2>
+            <p className="text-gray-600 mb-6">Browse and join available savings groups.</p>
+            <div className="text-center py-8">
+              <p className="text-gray-500">Group browser coming in next step...</p>
+            </div>
+          </div>
+        );
+      case 'my-groups':
+        return (
+          <div className="bg-white rounded-lg p-6 shadow-sm">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">My Groups</h2>
+            <p className="text-gray-600 mb-6">Manage your active savings groups.</p>
+            <div className="text-center py-8">
+              <p className="text-gray-500">No groups yet. Create or join a group to get started.</p>
+            </div>
+          </div>
+        );
+      case 'portfolio':
+        return (
+          <div className="bg-white rounded-lg p-6 shadow-sm">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Portfolio</h2>
+            <p className="text-gray-600 mb-6">Track your savings, earnings, and $SAV tokens.</p>
+            <div className="text-center py-8">
+              <p className="text-gray-500">Portfolio view coming in next step...</p>
+            </div>
+          </div>
+        );
+      default:
+        return null;
     }
-  };
-
-  const onSetApprovalForAll = () => {
-    if (!smartWalletClient) return;
-
-    smartWalletClient.sendTransaction({
-      to: NFT_CONTRACT_ADDRESS,
-      data: encodeFunctionData({
-        abi: erc721Abi,
-        functionName: "setApprovalForAll",
-        args: [smartWalletClient.account.address, true],
-      }),
-    });
-  };
-
-  const onBatchTransaction = () => {
-    if (!smartWalletClient) return;
-
-    smartWalletClient.sendTransaction({
-      account: smartWalletClient.account,
-      calls: [
-        {
-          to: NFT_CONTRACT_ADDRESS,
-          data: encodeFunctionData({
-            abi: mintAbi,
-            functionName: "mint",
-            args: [smartWalletClient.account.address],
-          }),
-        },
-        {
-          to: NFT_CONTRACT_ADDRESS,
-          data: encodeFunctionData({
-            abi: erc721Abi,
-            functionName: "setApprovalForAll",
-            args: [smartWalletClient.account.address, true],
-          }),
-        },
-      ],
-    });
   };
 
   return (
     <>
       <Head>
-        <title>Privy Smart Wallets Demo</title>
+        <title>Savio Dashboard</title>
       </Head>
 
-      <main className="flex flex-col min-h-screen px-4 sm:px-20 py-6 sm:py-10 bg-privy-light-blue">
+      <main className="min-h-screen bg-gray-50">
         {ready && authenticated && smartWalletClient ? (
           <>
-            <div className="flex flex-row justify-between">
-              <h1 className="text-2xl font-semibold">
-                Privy Smart Wallets Demo
-              </h1>
-              <button
-                onClick={logout}
-                className="text-sm bg-violet-200 hover:text-violet-900 py-2 px-4 rounded-md text-violet-700"
-              >
-                Logout
-              </button>
-            </div>
-            <div className="mt-12 flex gap-4 flex-wrap items-center">
-              <div className="flex items-center space-x-2">
-                <label className="text-sm font-medium text-gray-700">
-                  <input
-                    type="checkbox"
-                    checked={usePaymaster}
-                    onChange={(e) => setUsePaymaster(e.target.checked)}
-                    className="mr-2"
-                  />
-                  Use Paymaster (USDC gas)
-                </label>
+            {/* Header */}
+            <header className="bg-white shadow-sm border-b">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex justify-between items-center py-4">
+                  <div className="flex items-center">
+                    <h1 className="text-2xl font-bold text-indigo-600">Savio</h1>
+                    <span className="ml-2 text-sm text-gray-500">Dashboard</span>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <span className="text-sm text-gray-600">
+                      {smartWalletClient.account?.address?.slice(0, 6)}...{smartWalletClient.account?.address?.slice(-4)}
+                    </span>
+                    <button
+                      onClick={logout}
+                      className="text-sm bg-gray-100 hover:bg-gray-200 py-2 px-4 rounded-md text-gray-700 transition-colors"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </div>
               </div>
-              
-              <button
-                onClick={onMint}
-                disabled={paymasterLoading}
-                className={`text-sm py-2 px-4 rounded-md text-white border-none ${
-                  paymasterLoading 
-                    ? 'bg-gray-400 cursor-not-allowed' 
-                    : 'bg-violet-600 hover:bg-violet-700'
-                }`}
-              >
-                {paymasterLoading ? 'Processing...' : 'Mint NFT'}
-              </button>
-              <button
-                onClick={onSetApprovalForAll}
-                className="text-sm bg-violet-600 hover:bg-violet-700 py-2 px-4 rounded-md text-white border-none"
-              >
-                Approve
-              </button>
-              <button
-                onClick={onBatchTransaction}
-                className="text-sm bg-violet-600 hover:bg-violet-700 py-2 px-4 rounded-md text-white border-none"
-              >
-                Batch Transaction
-              </button>
-              <button
-                onClick={() => {
-                  console.log("🔍 Smart Wallet Debug Info:");
-                  console.log("Factory Address:", process.env.NEXT_PUBLIC_FACTORY_ADDRESS);
-                  console.log("User Smart Wallet:", user?.smartWallet);
-                  console.log("Smart Wallet Client:", smartWalletClient);
-                  console.log("Smart Wallet Address:", smartWalletClient?.account?.address);
-                  console.log("Chain ID:", smartWalletClient?.chain?.id);
-                  console.log("Network:", smartWalletClient?.chain?.name);
-                  
-                  // Check if wallet exists on blockchain
-                  if (smartWalletClient?.account?.address) {
-                    console.log("🔗 Check wallet on Sepolia:");
-                    console.log(`https://sepolia.etherscan.io/address/${smartWalletClient.account.address}`);
-                  }
-                }}
-                className="text-sm bg-yellow-600 hover:bg-yellow-700 py-2 px-4 rounded-md text-white border-none"
-              >
-                Debug Smart Wallet
-              </button>
-            </div>
+            </header>
 
-            <div className="mt-8">
-              <PaymasterBalance />
-            </div>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+              {/* Navigation Tabs */}
+              <div className="mb-8">
+                <nav className="flex space-x-8">
+                  {tabs.map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm ${
+                        activeTab === tab.id
+                          ? 'border-indigo-500 text-indigo-600'
+                          : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      }`}
+                    >
+                      <span>{tab.icon}</span>
+                      <span>{tab.name}</span>
+                    </button>
+                  ))}
+                </nav>
+              </div>
 
-            <p className="mt-6 font-bold uppercase text-sm text-gray-600">
-              User object
-            </p>
-            <pre className="max-w-4xl bg-slate-700 text-slate-50 font-mono p-4 text-xs sm:text-sm rounded-md mt-2">
-              {JSON.stringify(user, null, 2)}
-            </pre>
+              {/* Tab Content */}
+              {renderTabContent()}
+            </div>
           </>
-        ) : null}
+        ) : (
+          <div className="flex items-center justify-center min-h-screen">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+              <p className="mt-4 text-gray-600">Loading...</p>
+            </div>
+          </div>
+        )}
       </main>
     </>
   );
