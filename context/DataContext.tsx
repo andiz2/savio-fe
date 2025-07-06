@@ -1,9 +1,6 @@
 import { createContext, useContext, useState, ReactNode, useCallback } from 'react';
 
-type DataContextType = {
-  walletData: any;
-  setWalletData: any;
-};
+
 
 const DataContext = createContext<any>(undefined);
 
