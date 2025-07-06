@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import { createGroup, GET_PLEDGE_AMOUNT } from '../lib/protocol';
+import { useAuth } from "../context/DataContext";
+import { usePrivy } from '@privy-io/react-auth';
 
 interface Group {
   id: string;
@@ -49,122 +52,12 @@ const mockGroups: Group[] = [
     totalPool: 1250,
     status: 'open',
     nextRound: '2024-02-01T10:00:00Z'
-  },
-  {
-    id: '3',
-    name: 'Quick 72h Group',
-    description: 'Fast-paced savings with 72-hour cycles.',
-    contributionAmount: 50,
-    timeframe: '72h',
-    currentMembers: 5,
-    maxMembers: 5,
-    biddingEnabled: true,
-    creator: '0xabcd...efgh',
-    totalPool: 250,
-    status: 'full',
-    nextRound: '2024-01-12T10:00:00Z'
-  },
-  {
-    id: '4',
-    name: 'Family Savings Circle',
-    description: 'A trusted group for family members to save together.',
-    contributionAmount: 75,
-    timeframe: 'weekly',
-    currentMembers: 3,
-    maxMembers: 4,
-    biddingEnabled: true,
-    creator: '0xfam1...ly23',
-    totalPool: 225,
-    status: 'open',
-    nextRound: '2024-01-20T10:00:00Z'
-  },
-  {
-    id: '5',
-    name: 'High Rollers Club',
-    description: 'Premium savings group with higher contribution amounts.',
-    contributionAmount: 500,
-    timeframe: 'monthly',
-    currentMembers: 2,
-    maxMembers: 3,
-    biddingEnabled: false,
-    creator: '0xhigh...roll',
-    totalPool: 1000,
-    status: 'open',
-    nextRound: '2024-02-15T10:00:00Z'
-  },
-  {
-    id: '6',
-    name: 'Student Savings Network',
-    description: 'Affordable weekly savings for students and young professionals.',
-    contributionAmount: 25,
-    timeframe: 'weekly',
-    currentMembers: 6,
-    maxMembers: 8,
-    biddingEnabled: true,
-    creator: '0xstud...ent1',
-    totalPool: 150,
-    status: 'open',
-    nextRound: '2024-01-18T10:00:00Z'
-  },
-  {
-    id: '7',
-    name: 'Crypto Enthusiasts',
-    description: 'Monthly group for crypto community members.',
-    contributionAmount: 150,
-    timeframe: 'monthly',
-    currentMembers: 4,
-    maxMembers: 5,
-    biddingEnabled: true,
-    creator: '0xcryp...to1',
-    totalPool: 600,
-    status: 'open',
-    nextRound: '2024-02-10T10:00:00Z'
-  },
-  {
-    id: '8',
-    name: 'Rapid Fire 72h',
-    description: 'Quick 72-hour cycles for active traders.',
-    contributionAmount: 75,
-    timeframe: '72h',
-    currentMembers: 4,
-    maxMembers: 4,
-    biddingEnabled: true,
-    creator: '0xrapi...d1',
-    totalPool: 300,
-    status: 'full',
-    nextRound: '2024-01-14T10:00:00Z'
-  },
-  {
-    id: '9',
-    name: 'Small Business Owners',
-    description: 'Weekly group for small business owners to save together.',
-    contributionAmount: 200,
-    timeframe: 'weekly',
-    currentMembers: 3,
-    maxMembers: 4,
-    biddingEnabled: false,
-    creator: '0xbus1...ness',
-    totalPool: 600,
-    status: 'open',
-    nextRound: '2024-01-22T10:00:00Z'
-  },
-  {
-    id: '10',
-    name: 'Retirement Savers',
-    description: 'Monthly group focused on long-term retirement planning.',
-    contributionAmount: 300,
-    timeframe: 'monthly',
-    currentMembers: 5,
-    maxMembers: 6,
-    biddingEnabled: false,
-    creator: '0xret1...rement',
-    totalPool: 1500,
-    status: 'open',
-    nextRound: '2024-02-05T10:00:00Z'
   }
 ];
 
 export default function JoinGroupBrowser({ onJoinGroup, isLoading = false }: JoinGroupBrowserProps) {
+  const { walletData} = useAuth();
+   const { user } = usePrivy();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<'all' | 'open' | 'full'>('all');
   const [filterTimeframe, setFilterTimeframe] = useState<'all' | '72h' | 'weekly' | 'monthly'>('all');
@@ -283,6 +176,34 @@ export default function JoinGroupBrowser({ onJoinGroup, isLoading = false }: Joi
         return null;
     }
   };
+
+  const fetchGetter = async() => {
+    const pledgeAmount = await GET_PLEDGE_AMOUNT(walletData, 2);
+    const readable = Number(pledgeAmount) / 1e6;
+    console.log("pledgeAmount", readable)
+  }
+
+  const checkBalance = async () => {
+  const balance = await walletData.publicClient.readContract({
+    address: "0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582",
+    abi: [
+      {
+        inputs: [{ name: 'account', type: 'address' }],
+        name: 'balanceOf',
+        outputs: [{ name: '', type: 'uint256' }],
+        stateMutability: 'view',
+        type: 'function'
+      }
+    ],
+    functionName: 'balanceOf',
+    args: [walletData.account.address]
+  });
+  
+  console.log('Current balance:', balance.toString());
+  return balance;
+};
+
+
 
   return (
     <div className="max-w-6xl mx-auto space-y-8">

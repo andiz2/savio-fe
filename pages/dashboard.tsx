@@ -635,24 +635,13 @@ export default function DashboardPage() {
                   
                   <div className="bg-gray-700/30 rounded-xl p-4 border border-gray-600 mb-6">
                     <div className="flex items-center justify-between">
-                      <input
-                        type="text"
-                        value={createdGroupLink}
-                        readOnly
-                        className="flex-1 bg-transparent text-white font-mono text-sm mr-3"
-                      />
-              <button
-                        onClick={() => navigator.clipboard.writeText(createdGroupLink)}
-                        className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 px-4 py-2 rounded-lg text-white font-medium transition-all duration-300"
-              >
-                        Copy
-              </button>
+                      <p className="text-lg text-white underline">See tx on scan</p>
                     </div>
                   </div>
                   
                   <div className="space-y-3">
               <button
-                      onClick={() => onInviteModalOpen(false)}
+                      onClick={() => onInviteModalClose()}
                       className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 py-3 px-6 rounded-xl font-semibold text-white transition-all duration-300"
               >
                       Continue to Dashboard

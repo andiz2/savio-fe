@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { createGroup } from '../lib/protocol';
+import { useAuth } from '../context/DataContext';
 
 interface CollateralDepositProps {
   groupId: string;
@@ -23,6 +25,7 @@ export default function CollateralDeposit({
   onDepositComplete, 
   onCancel 
 }: CollateralDepositProps) {
+    const { walletData} = useAuth();
   const [isDepositing, setIsDepositing] = useState(false);
   const [depositAmount, setDepositAmount] = useState(contributionAmount * maxMembers);
   const [userBalance] = useState(1000); // Mock USDC balance
@@ -72,6 +75,12 @@ export default function CollateralDeposit({
     const value = parseFloat(e.target.value) || 0;
     setDepositAmount(value);
   };
+
+    const joinGroupUser = () => {
+      const smartAccount = walletData.smartAccount;
+      createGroup(smartAccount, handleDeposit);
+    };
+
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
@@ -195,7 +204,7 @@ export default function CollateralDeposit({
             Cancel
           </button>
           <button
-            onClick={handleDeposit}
+            onClick={() => joinGroupUser()}
             disabled={isDepositing || depositAmount < totalLumpSum || depositAmount > userBalance}
             className={`flex-1 px-4 py-2 rounded-xl font-medium text-white transition-all duration-300 ${
               isDepositing || depositAmount < totalLumpSum || depositAmount > userBalance
