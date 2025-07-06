@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { createGroup, GET_PLEDGE_AMOUNT } from '../lib/protocol';
-import { useAuth } from "../context/DataContext";
-import { usePrivy } from '@privy-io/react-auth';
+//import { GET_PLEDGE_AMOUNT } from '../lib/protocol';
+//import { useAuth } from "../context/DataContext";
+//import { usePrivy } from '@privy-io/react-auth';
 
 interface Group {
   id: string;
@@ -56,8 +56,8 @@ const mockGroups: Group[] = [
 ];
 
 export default function JoinGroupBrowser({ onJoinGroup, isLoading = false }: JoinGroupBrowserProps) {
-  const { walletData} = useAuth();
-   const { user } = usePrivy();
+  //const { walletData} = useAuth();
+   //const { user } = usePrivy();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<'all' | 'open' | 'full'>('all');
   const [filterTimeframe, setFilterTimeframe] = useState<'all' | '72h' | 'weekly' | 'monthly'>('all');
@@ -177,31 +177,31 @@ export default function JoinGroupBrowser({ onJoinGroup, isLoading = false }: Joi
     }
   };
 
-  const fetchGetter = async() => {
-    const pledgeAmount = await GET_PLEDGE_AMOUNT(walletData, 2);
-    const readable = Number(pledgeAmount) / 1e6;
-    console.log("pledgeAmount", readable)
-  }
+//   const fetchGetter = async() => {
+//     const pledgeAmount = await GET_PLEDGE_AMOUNT(walletData, 2);
+//     const readable = Number(pledgeAmount) / 1e6;
+//     console.log("pledgeAmount", readable)
+//   }
 
-  const checkBalance = async () => {
-  const balance = await walletData.publicClient.readContract({
-    address: "0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582",
-    abi: [
-      {
-        inputs: [{ name: 'account', type: 'address' }],
-        name: 'balanceOf',
-        outputs: [{ name: '', type: 'uint256' }],
-        stateMutability: 'view',
-        type: 'function'
-      }
-    ],
-    functionName: 'balanceOf',
-    args: [walletData.account.address]
-  });
+//   const checkBalance = async () => {
+//   const balance = await walletData.publicClient.readContract({
+//     address: "0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582",
+//     abi: [
+//       {
+//         inputs: [{ name: 'account', type: 'address' }],
+//         name: 'balanceOf',
+//         outputs: [{ name: '', type: 'uint256' }],
+//         stateMutability: 'view',
+//         type: 'function'
+//       }
+//     ],
+//     functionName: 'balanceOf',
+//     args: [walletData.account.address]
+//   });
   
-  console.log('Current balance:', balance.toString());
-  return balance;
-};
+//   console.log('Current balance:', balance.toString());
+//   return balance;
+// };
 
 
 
